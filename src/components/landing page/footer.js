@@ -1,10 +1,10 @@
 import React from "react";
 import { FaGithub } from 'react-icons/fa';
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 
 const Footer = () => {
     return(
-        <div className="footer">
+        <footer className="footer">
             
             <img src={logo} alt="brand logo" className="logo"/>
 
@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
 
             <FaGithub size={80}/>
-        </div>
+        </footer>
     );
 };
 

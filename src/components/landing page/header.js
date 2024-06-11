@@ -1,9 +1,9 @@
 import React from "react";
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 
 const Header = () => {
     return(
-        <div className="header">
+        <header className="header">
             <img src={logo} alt="brand logo" className="logo"/>
 
             <nav>
@@ -12,7 +12,7 @@ const Header = () => {
                     <li><a href="../pages/landingPage.js">SIGNUP</a></li>
                 </ul>
             </nav>
-        </div>
+        </header>
     );
 }
 
