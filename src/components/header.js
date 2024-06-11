@@ -1,11 +1,10 @@
 import React from "react";
+import logo from "../assets/logo.png";
 
 const Header = () => {
     return(
         <div className="header">
-            <div className="logo-container">
-                <h1>BookIt!</h1>
-            </div>
+            <img src={logo} alt="brand logo" className="logo"/>
 
             <nav>
                 <ul>
