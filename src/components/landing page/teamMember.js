@@ -2,7 +2,6 @@ import React from "react";
 
 
 const TeamMember = ({ name, role, picture }) => {
-    console.log({picture});
     return(
         <div className="team-member-container">
             <img src={picture} alt={`${name}`} className="team-member-img" />
