@@ -1,7 +1,4 @@
 import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
 
 import TeamMember from "./teamMember";
 
@@ -60,12 +57,11 @@ const Team = () => {
         <section className="team">
             <h2 className="section-heading">Meet the BookIt! Team</h2>
 
-            
-            <Slider {...settings}>
+            <div className="team-members">
                 {teamMembers.map(member => (
                     <TeamMember key={member.name} name={member.name} role={member.role} picture={member.picture} />
                 ))}
-            </Slider>
+            </div>
         </section>
     );
 };
