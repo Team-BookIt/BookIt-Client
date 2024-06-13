@@ -1,13 +1,17 @@
 import React from "react";
 
+import img1 from "../../assets/image-1.png"
+import attendees from "../../assets/attendees.png"
+import organiser from "../../assets/organiser.png"
+
 const Section = () => {
     return(
         <section>
             {/* what is bookit */}
             <div className="section">
-                <img alt=""/>
+                <img alt="An event setting" src={img1} className="section-img"/>
 
-                <div>
+                <div className="section-text-container">
                     <h1 className="section-heading">What is BookIt!?</h1>
                     <p>
                         BookIt! is the ultimate event platform designed to bring organizers and attendees together seamlessly. 
@@ -20,7 +24,7 @@ const Section = () => {
 
             {/* bookit for organisers */}
             <div className="section">
-                <div>
+                <div className="section-text-container">
                     <h1 className="section-heading">BookIt! for Organizers</h1>
                     <ul>
                         <li>Create detailed event listings</li>
@@ -33,14 +37,14 @@ const Section = () => {
                     </p>        
                 </div>
 
-                <img alt=""/>
+                <img alt="People at an event" src={organiser} className="section-img"/>
             </div>
 
             {/* bookit for attendees */}
             <div className="section">
-                <img alt=""/>
+                <img alt="An event organizer" src={attendees} className="section-img"/>
 
-                <div>
+                <div className="section-text-container">
                     <h1 className="section-heading">BookIt! for Attendees</h1>
                     <p>
                         Discover a world of events that match your interests on BookIt!.
