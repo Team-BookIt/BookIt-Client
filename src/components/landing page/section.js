@@ -1,18 +1,25 @@
 import React from "react";
-
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import img1 from "../../assets/image-1.png"
 import attendees from "../../assets/attendees.png"
 import organiser from "../../assets/organiser.png"
 
 const Section = () => {
+    const [section1ref, section1Visible] = useIntersectionObserver({ threshold: 0.1});
+    const [section2ref, section2Visible] = useIntersectionObserver({ threshold: 0.1});
+    const [section3ref, section3Visible] = useIntersectionObserver({ threshold: 0.1});
+
     return(
         <section>
             {/* what is bookit */}
-            <div className="section">
-                <img alt="An event setting" src={img1} className="section-img"/>
+            <div ref={section1ref} className={`section ${section1Visible ? "visible" : ""}`}>
+                <div className="section-img-container">
+                        <div className="img-underlay"></div>
+                        <img alt="People at an event" src={img1} className="section-img"/>
+                </div>
 
                 <div className="section-text-container">
-                    <h1 className="section-heading">What is BookIt!?</h1>
+                    <h1 className="section-heading">What's BookIt!?</h1>
                     <p>
                         BookIt! is the ultimate event platform designed to bring organizers and attendees together seamlessly. 
                     </p>
@@ -23,7 +30,7 @@ const Section = () => {
             </div>
 
             {/* bookit for organisers */}
-            <div className="section">
+            <div ref={section2ref} className={`section ${section2Visible ? "visible" : ""}`}>
                 <div className="section-text-container">
                     <h1 className="section-heading">BookIt! for Organizers</h1>
                     <ul>
@@ -36,13 +43,19 @@ const Section = () => {
                         Our platform is designed to save you time and effort, so you can focus on delivering an outstanding experience.
                     </p>        
                 </div>
-
-                <img alt="People at an event" src={organiser} className="section-img"/>
+                
+                <div className="section-img-container">
+                    <div className="img-underlay"></div>
+                    <img alt="People at an event" src={organiser} className="section-img"/>
+                </div>
             </div>
 
             {/* bookit for attendees */}
-            <div className="section">
-                <img alt="An event organizer" src={attendees} className="section-img"/>
+            <div ref={section3ref} className={`section ${section3Visible ? "visible" : ""}`}>
+                <div className="section-img-container">
+                        <div className="img-underlay"></div>
+                        <img alt="People at an event" src={attendees} className="section-img"/>
+                </div>
 
                 <div className="section-text-container">
                     <h1 className="section-heading">BookIt! for Attendees</h1>
