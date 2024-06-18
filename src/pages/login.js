@@ -1,17 +1,24 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PrimaryButton from "../components/landing page/primaryButton";
 
 import logo from "../assets/logo.png";
 import sideImage from "../assets/onboarding-1.png";
 
-const handleLoginPress = () => {
-    console.log("Login button pressed!");
-}
 
 
 const Login = () => {
+    const navigate = useNavigate();
     const [userType, setUserType] = useState("attendee");
+    
+    const handleLoginPress = () => {
+        navigate("/")
+    }
+
+    const handleSignupPress = () => {
+        navigate("/signup");
+    }
 
     return(
         <div className="onboarding-container">
@@ -20,7 +27,7 @@ const Login = () => {
             <div className="onboarding-main">
                 <img src={logo} />
                 <p>
-                    Don't have an account? <a href="#">Create one.</a>
+                    Don't have an account? <span onClick={handleSignupPress}>Create one.</span>
                 </p>
 
                 <div className="switch-bar">

@@ -1,16 +1,24 @@
 import React from "react";
-import "../../styles.css";
+import { useNavigate } from "react-router-dom";
+
 import logo from "../../assets/logo.png";
 
 const Header = () => {
+    const navigate = useNavigate();
+
     return(
         <header>
             <img src={logo} alt="brand logo" className="logo"/>
 
             <nav>
                 <ul className="header-links-container">
-                    <li className="login"><a href="../pages/landingPage.js">LOGIN</a></li>
-                    <li className="signup"><a href="../pages/landingPage.js">SIGNUP</a></li>
+                    <li className="login" onClick={() => navigate("/login")}>
+                        <p>LOGIN</p>
+                    </li>
+
+                    <li className="signup" onClick={() => navigate("/signup")}>
+                        <p>SIGNUP</p>
+                    </li>
                 </ul>
             </nav>
         </header>

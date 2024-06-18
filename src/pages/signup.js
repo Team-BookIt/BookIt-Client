@@ -1,17 +1,28 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PrimaryButton from "../components/landing page/primaryButton";
 
 import logo from "../assets/logo.png";
 import sideImage from "../assets/onboarding-2.png";
 
-const handleSignupPress = () => {
-    console.log("Login button pressed!");
-}
 
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [userType, setUserType] = useState("attendee");
+    
+    const handleAttendeeSignup = () => {
+        navigate("/")
+    }
+
+    const handleLoginPress = () => {
+        navigate("/login");
+    }
+
+    const hanldeOrganizerSignup = () => {
+        navigate("/organizerProfileForm");
+    }
 
     return(
         <div className="onboarding-container">
@@ -20,7 +31,7 @@ const Signup = () => {
             <div className="onboarding-main">
                 <img src={logo} />
                 <p>
-                    Already have an account? <a href="#">Log in.</a>
+                    Already have an account? <span onClick={handleLoginPress}>Log in.</span>
                 </p>
 
                 <div className="switch-bar">
@@ -62,7 +73,10 @@ const Signup = () => {
                     </div>
                 )}
                 
-                <PrimaryButton title={"Signup"} onButtonClick={handleSignupPress}/>
+                <PrimaryButton 
+                    title={"Signup"} 
+                    onButtonClick={userType == "attendee" ? handleAttendeeSignup : hanldeOrganizerSignup}
+                />
             </div>
         </div>
     );
