@@ -4,6 +4,8 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Helvetica, sans-serif;
+    -ms-overflow-style: none; /* Hide scrollbar on Internet Explorer 10+ */
+    scrollbar-width: none; /* Hide scrollbar on Firefox */
 }
 
 
@@ -130,10 +132,13 @@ section {
     align-items: flex-start;
     padding: 20px;
     gap: 20px;
-    flex-wrap: wrap;
     opacity: 0;
     transform: translateY(50px);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+section :nth-child(odd) .section-text-container {
+    margin-left: 40px;
 }
 
 .section.visible {
@@ -278,4 +283,109 @@ section {
     width: 100%;
     text-align: right;
     margin-top: 40px;
+}
+
+
+/* login/signup */
+.onboarding-container {
+    display: flex;
+    width: 100vw;
+    position: relative;
+}
+
+.onboarding-img-container {
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #444444;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 1px 0px 20px 0px #565656;
+}
+
+.onboarding-main {
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 70px;
+    margin-left: 50vw;
+    overflow-y: auto;
+}
+
+.onboarding-main img {
+    max-width: 180px;
+    margin-bottom: 10px;
+}
+
+.onboarding-main p {
+    margin: 10px 0;
+}
+
+.onboarding-main .switch-bar {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #FDFFB0;
+    border-radius: 30px;
+    font-weight: 600;
+    margin: 20px 10px;
+}
+
+.onboarding-main .switch-bar p {
+    text-align: center;
+    width: 45%;
+    cursor: pointer;
+}
+
+.onboarding-main .switch-bar .active {
+    border-radius: 20px;
+    background-color: #FFC107;
+    color: #fff;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+.onboarding-main .form-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.onboarding-main .form-container input{
+    width: 100%;
+    font-size: 18px;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px #929292 solid;
+    box-shadow: 0 2px 3px 0 #565656;
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px auto 100px auto;
+}
+
+.button-container button {
+    width: 70%;
+    background-color: #FFC107;
+    border: 0;
+    box-shadow: 0 2px 3px 0 #565656;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
 }
