@@ -43,7 +43,7 @@ header {
     background-color: transparent;
 }
 
-.login a, .signup a {
+.login p, .signup p {
     text-decoration: none;
     color: #000;
 }
@@ -327,6 +327,15 @@ section :nth-child(odd) .section-text-container {
     margin: 10px 0;
 }
 
+.onboarding-main p span {
+    color: blue;
+    border-bottom: 1px solid blue;
+}
+
+.onboarding-main p span:hover {
+    cursor: pointer;
+}
+
 .onboarding-main .switch-bar {
     display: flex;
     flex-direction: row;
@@ -375,7 +384,7 @@ section :nth-child(odd) .section-text-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 50px auto 100px auto;
+    margin: 50px auto 50px auto;
 }
 
 .button-container button {
@@ -388,4 +397,30 @@ section :nth-child(odd) .section-text-container {
     border-radius: 10px;
     color: #fff;
     font-weight: 600;
+}
+
+.button-container button:hover {
+    cursor: pointer;
+}
+
+.verification-text-container {
+    margin: 20px 0 10px 0;
+}
+
+.verification-text-container p {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.verification-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 70%;
+    padding-left: 30px;
+    font-size: 18px;
+}
+
+.verification-footer p {
+    width: 100%;
 }
