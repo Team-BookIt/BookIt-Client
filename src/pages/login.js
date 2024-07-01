@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 import PrimaryButton from "../components/landing page/primaryButton";
 
 import logo from "../assets/logo.png";

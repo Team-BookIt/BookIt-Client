@@ -26,10 +26,10 @@ const Signup = () => {
 
     return(
         <div className="onboarding-container">
-            <img src={sideImage} className="onboarding-img-container" />
+            <img src={sideImage} className="onboarding-img-container" alt="people at an event"/>
 
             <div className="onboarding-main">
-                <img src={logo} />
+                <img src={logo} alt="bookit-logo" />
                 <p>
                     Already have an account? <span onClick={handleLoginPress}>Log in.</span>
                 </p>
