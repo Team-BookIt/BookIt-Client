@@ -118,16 +118,13 @@ header {
 
 /* Section */
 section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
-    max-width: 1200px;
     margin: 80px auto;
+    padding: 0 30px;
 }
 
 .section {
-    height: 90vh;
+    height: 560px;
     display: flex;
     align-items: flex-start;
     padding: 20px;
@@ -138,7 +135,12 @@ section {
 }
 
 section :nth-child(odd) .section-text-container {
-    margin-left: 40px;
+    position: absolute;
+    margin-left: 560px;
+}
+
+section :nth-child(even) .section-text-container {
+    flex: 1;
 }
 
 .section.visible {
@@ -147,8 +149,8 @@ section :nth-child(odd) .section-text-container {
 }
 
 .section-img-container {
-    position: relative;
-    flex: 0.7; 
+    /* position: relative; */
+    flex: 0.5;
     min-width: 300px; 
     max-width: 50%; 
 }
@@ -173,9 +175,8 @@ section :nth-child(odd) .section-text-container {
 
 .section-text-container {
     margin-left: 00px;    
-    flex: 1; 
-    min-width: 300px; 
-    max-width: 60%; 
+    /* width: 60%; 
+    min-width: 300px;  */
 }
 .section-heading {
     font-size: 60px;
@@ -187,7 +188,7 @@ section :nth-child(odd) .section-text-container {
 .section p {
     margin-bottom: 15px;
     line-height: 1.6;
-    font-size: 2.5vw;
+    font-size: 2.3vw;
 }
 
 .section ul {
@@ -424,3 +425,409 @@ section :nth-child(odd) .section-text-container {
 .verification-footer p {
     width: 100%;
 }
+
+
+/* sidebar */
+.sidebarContainer {
+    width: 17vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #FFC107;
+    padding: 50px 0px;
+    position: fixed;
+}
+
+.sideBarLogo {
+    width: 70%;
+    margin-bottom: 50px;
+}
+
+.sidebarButtons {
+    width: 100%;
+    padding-left: 20px;
+}
+
+.sidebarButton, .activeSidebarButton {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 20px;
+    margin-bottom: 5px;;
+    cursor: pointer;
+}
+
+.sidebarButton:hover, .activeSidebarButton {
+    background-color: #fff;
+    border-top-left-radius: 100px;
+    border-bottom-left-radius: 100px;
+}
+.sidebarButton:hover p,
+.sidebarButton:hover .icon {
+    color: #FFC107;
+}
+
+.sidebarButton p {
+    font-size: 18px;
+    color: #fff;
+    padding-left: 20px;
+    font-weight: 600;
+}
+
+.sidebarButton .icon {
+    color: #fff;
+    size: 40;
+}
+
+.activeSidebarButton p {
+    padding-left: 20px;
+    font-weight: 600;
+    color: #FFC107;
+    font-size: 18px;
+}
+
+.activeSidebarButton .icon {
+    color: #FFC107;
+}
+
+/* event */
+.event-container {
+    border-radius: 15px;
+    overflow: hidden;
+    width: 400px;
+    background-color: #fff;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    border: 1px solid #cacaca;
+    margin-right: 40px;
+}
+
+.event-container .event-header {
+    display: flex;
+    justify-content: space-between;
+    background: url("./assets/hero-bg.jpg");
+    padding: 20px;
+    height: 120px;
+}
+
+.event-container .event-info-container {
+    margin: 20px;
+}
+
+.event-container .event-name {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline;
+}
+
+.event-container .event-name:hover {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.event-container .event-organizer-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.event-container .event-organizer-details img {
+    width: 30px;
+    border-radius: 100px;
+    margin-right: 10px;
+}
+
+.event-container .event-organizer-details p {
+    color: #FFC107;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.event-description {
+    font-weight: 400;
+    font-size: 15px;
+    color: #4d4d4d;
+}
+
+.event-container .event-details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.event-container .event-detail {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border-radius: 100px;
+    background-color: #FDFFB0;
+}
+
+.event-container .event-detail P {
+    margin-left: 7px;
+}
+
+
+.event-container .categories-container {
+    margin-top: 30px;
+}
+
+.event-container .categories-container p {
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.event-container .categories-container .categories {
+    display: flex;
+}
+
+.event-container .categories-container .categories p {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    background-color: #FDFFB0;
+    margin-top: 10px;
+    font-weight: lighter;
+    font-size: 15px;
+}
+
+/* attendee header */
+.attendee-header {
+    display: flex;
+    width: 83vw;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    margin-left: 17vw;
+    height: 100px;
+    background-color: #fff;
+    position: fixed;
+    border-bottom: #FFC107 solid 1px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+.attendee-header p {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.attendee-header img {
+    border-radius: 300px;
+    width: 60px;
+    height: 60px;
+    background-color: #565656;
+}
+
+
+/* search bar */
+.search-bar {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 18px;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 100px;
+    border: 1px #929292 solid;
+    box-shadow: 0 2px 3px 0 #565656;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    font-size: 18px;
+}
+
+.search-bar input:focus {
+    border: none;
+    outline: none;
+}
+
+
+/* attendee pages */
+.page-container {
+    padding: 140px 20px 20px 19vw;
+}
+
+
+/* home */
+.events-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 50px;
+}
+
+/* bookings */
+.booked-event-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 550px;
+    /* height: 200px; */
+    padding: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    margin: 0 20px 50px 0;
+}
+
+.booked-event-container .image-container {
+    height: 200px;
+}
+
+.booked-event-container .image-container img {
+    background-size: cover;
+    height: 100%;
+}
+
+.booked-event-details-container {
+    margin: 20px 20px;
+}
+
+.booked-event-details-container .event-name {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    cursor: pointer;
+    display: inline;   
+}
+
+.booked-event-details-container .event-name:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.booked-event-details-container .event-detail {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-right: 15px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border-radius: 100px;
+    background-color: #FDFFB0;
+}
+
+.booked-event-details-container .event-detail p {
+    margin-left: 10px;
+}
+
+
+/* add event */
+.event-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .event-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .event-form-header p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .event-form-header svg {
+    cursor: pointer;
+    font-size: 24px;
+  }
+  
+  .event-form-group {
+    margin-bottom: 15px;
+  }
+  
+  .event-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .event-form-input,
+  .event-form-textarea,
+  .event-form-select,
+  .event-form-datepicker {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .event-form-input-file {
+    margin-bottom: 10px;
+  }
+  
+  .event-form-info {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .event-form-info svg {
+    margin-right: 5px;
+  }
+  
+  .event-form-fee-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .event-form-fee-container input {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .event-form-category-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .event-form-add-category-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .event-form-submit-button {
+    background-color: #fdd835;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+  }
+  
