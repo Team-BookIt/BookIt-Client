@@ -2,11 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 // components
-import LandingPage from './pages/landingPage';
-import Login from './pages/login';
-import Signup from './pages/signup';
-import OrganizerProfileForm from './pages/organizerProfileFrom';
-import AccountVerification from './pages/accountVerification';
+import LandingPage from './pages/(onboarding)/landingPage';
+import Login from './pages/(onboarding)/login';
+import Signup from './pages/(onboarding)/signup';
+import OrganizerProfileForm from './pages/(onboarding)/organizerProfileFrom';
+import AccountVerification from './pages/(onboarding)/accountVerification';
+import Main from './pages/(attendee)/index';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element={<Signup/>} />
         <Route path="/organizerProfileForm" element={<OrganizerProfileForm/>} />
         <Route path="/accountVerification" element={<AccountVerification/>} />
+        <Route path="/mainPage" element={<Main />} />
       </Routes>
     </Router>
   );

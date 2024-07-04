@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import PrimaryButton from "../components/landing page/primaryButton";
+import PrimaryButton from "../../components/primaryButton";
 
-import logo from "../assets/logo.png";
-import sideImage from "../assets/onboarding-1.png";
+import logo from "../../assets/logo.png";
+import sideImage from "../../assets/onboarding-1.png";
 
 
 
