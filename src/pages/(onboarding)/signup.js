@@ -10,7 +10,7 @@ import sideImage from "../../assets/onboarding-2.png";
 
 const Signup = () => {
     const navigate = useNavigate();
-    const backendRoute = "https://book-it-server-sigma.vercel.app/";
+    const backendRoute = process.env.BOOKIT_BACKEND_URL;
 
     // to keep track of which type of user is signing up: attendee or organizer
     const [userType, setUserType] = useState("attendee"); 
@@ -60,7 +60,7 @@ const Signup = () => {
                 
                 if (response.data.message === "User created successfull") {
                     alert("Signed up successfully!");
-                    navigate("/");
+                    navigate("/mainPage");
                 } else {
                     alert(`${response.data.message}`);
                 }

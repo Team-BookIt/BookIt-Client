@@ -1,27 +1,39 @@
+// Event.js
 import React from "react";
 import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-import logo from "../../assets/sec-logo-1.png"
-const Event = ({name, rate, date, time, venue, description, organizer, categories}) => {
-    const handleSeeMorePress = () => {
-        alert("See more!")
-    }
-    return(
+const Event = ({ name, rate, date, time, venue, description, organizer, organizer_logo, categories }) => {
+    const navigate = useNavigate();
+
+    rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
+
+    const handleEventPress = () => {
+        navigate("/eventPage", {
+            state: {
+                name,
+                rate,
+                date,
+                time,
+                venue,
+                description,
+                organizer,
+                organizer_logo,
+                categories
+            }
+        });
+    };
+
+    return (
         <div className="event-container">
             <div className="event-header">
                 <img alt="event header image" />
             </div>
-
             <div className="event-info-container">
-                <p className="event-name">{name}</p>
-{/* 
-                <div className="event-organizer-details">
-                    <img src={logo} alt="organizer logo"/>
-                    <p>{organizer}</p>
-                </div> */}
-
+                <p className="event-name" onClick={handleEventPress}>
+                    {name}
+                </p>
                 <p className="event-description">{description}</p>
-
                 <div className="event-details">
                     <div className="event-detail">
                         <MdAccessTime />
@@ -39,24 +51,19 @@ const Event = ({name, rate, date, time, venue, description, organizer, categorie
                         <MdMoney />
                         <p>{rate}</p>
                     </div>
-
                 </div>
-
-
-
+                
                 <div className="categories-container">
                     <p>Categories</p>
                     <div className="categories">
-                        {categories.map((category, index) => {
-                            return(
-                                <p key={index}>{category}</p>
-                            )
-                        })}
+                        {categories.map((category, index) => (
+                            <p key={index}>{category}</p>
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Event;
