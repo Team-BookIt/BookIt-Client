@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const backendUrl = "https://book-it-server-sigma.vercel.app"
+const backendURL = process.env.REACT_APP_BOOKIT_BACKEND_URL;
+
 
 export const fetchEvents = async () => {
+    console.log("Backend url", backendURL)
     try {
-        const response = await axios.get(`${backendUrl}/events`);
+        const response = await axios.get(`${backendURL}/events`);
         return response.data.events;
     } catch (error) {
         console.log("Error fetching events from utility function:", error);
