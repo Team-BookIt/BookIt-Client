@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
     MdAccessTime, 
     MdLocationOn, 
@@ -8,14 +8,18 @@ import {
     MdEmail, 
     MdLanguage, 
     MdPhone,
-    MdPerson
+    MdPerson,
+    MdChat
 } from "react-icons/md";
 import Header from "../../components/(attendee)/header";
 import SideBar from "../../components/(universal)/sideBar";
 import PrimaryButton from "../../components/primaryButton";
+import AttendeeReview from "../../components/(attendee)/attendeeReview";
+import { bookEvent } from "../../utils/bookEvent";
 
 
 const EventPage = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const {
         name,
@@ -26,12 +30,24 @@ const EventPage = () => {
         description,
         organizer,
         organizer_logo,
-        categories
+        categories,
+        isEnded,
+        id
     } = location.state || {};
 
     const handleBookEvent = () => {
+        bookEvent(id);
         alert("Event booked successfullly");
+        navigate("/mainPage");
     };
+
+    const handleViewOrganizerProfile = () => {
+        navigate("/organizerProfile", {
+            state: {
+                organizer,
+                organizer_logo
+        }})
+    }
 
     return (
         <div className="parent-container">
@@ -94,26 +110,56 @@ const EventPage = () => {
                                 </div>
 
                                 <div>
-                                    <button>View Profile</button>
+                                    <button onClick={handleViewOrganizerProfile}>
+                                        View Profile
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="categories-container">
-                        <p className="custom-underline">Categories</p>
-                        <div className="categories">
-                            {categories.map((category, index) => {
-                                return(
-                                    <p key={index}>{category}</p>
-                                )
-                            })}
+                    {categories[0] !== null && (
+                        <div className="categories-container">
+                            <p className="custom-underline">Categories</p>
+                            <div className="categories">
+                                {categories.map((category, index) => {
+                                    return(
+                                        <p key={index}>{category}</p>
+                                    )
+                                })}
+                            </div>
                         </div>
-                    </div>
+                    )}
+                    {!isEnded ? (
+                        <div>
+                            <PrimaryButton title={"Book It"} onButtonClick={handleBookEvent} />
+                        </div>
+                    ) : (                        
+                        <div>
+                            <div className="reviews-header">
+                                <p className="custom-underline">Reviews</p>
+                                <div className="review-button">
+                                    <MdChat />
+                                    <p>Leave a review</p>
+                                </div>
+                            </div>
 
-                    <div>
-                        <PrimaryButton title={"Book It"} onButtonClick={handleBookEvent} />
-                    </div>
+                            <div>
+                                <AttendeeReview 
+                                    rating={4.5} 
+                                    review={"Had a great time. Would definitely want to go again."} 
+                                />
+                                <AttendeeReview 
+                                    rating={4.5} 
+                                    review={"Had a great time. Would definitely want to go again."} 
+                                />
+                                <AttendeeReview 
+                                    rating={4.5} 
+                                    review={"Had a great time. Would definitely want to go again."} 
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
