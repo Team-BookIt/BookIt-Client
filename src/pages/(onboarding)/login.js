@@ -29,10 +29,12 @@ const Login = () => {
     
     const handleLoginPress = async (event) => {
         event.preventDefault();
-
+    
         try {
             const response = await axios.post(backendRoute, formValues);
-            console.log(response.data)
+            localStorage.setItem("userData", JSON.stringify(response.data.user[0]));
+            console.log(response.data);
+            console.log(response.data.user[0]);
             alert("Login successful");
             navigate("/mainPage");
         } catch (error) {
