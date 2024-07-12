@@ -3,7 +3,19 @@ import React from "react";
 import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-const Event = ({ name, rate, date, time, venue, description, organizer, organizer_logo, categories }) => {
+const Event = ({
+    name, 
+    rate,
+    date, 
+    time, 
+    venue, 
+    description, 
+    organizer, 
+    organizer_logo, 
+    categories, 
+    id, 
+    isEnded
+}) => {
     const navigate = useNavigate();
 
     rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
@@ -11,6 +23,7 @@ const Event = ({ name, rate, date, time, venue, description, organizer, organize
     const handleEventPress = () => {
         navigate("/eventPage", {
             state: {
+                id,
                 name,
                 rate,
                 date,
@@ -19,7 +32,8 @@ const Event = ({ name, rate, date, time, venue, description, organizer, organize
                 description,
                 organizer,
                 organizer_logo,
-                categories
+                categories,
+                isEnded
             }
         });
     };
@@ -53,14 +67,16 @@ const Event = ({ name, rate, date, time, venue, description, organizer, organize
                     </div>
                 </div>
                 
-                <div className="categories-container">
-                    <p>Categories</p>
-                    <div className="categories">
-                        {categories.map((category, index) => (
-                            <p key={index}>{category}</p>
-                        ))}
+                {categories[0] !== null && (
+                    <div className="categories-container">
+                        <p>Categories</p>
+                        <div className="categories">
+                            {categories.map((category, index) => (
+                                <p key={index}>{category}</p>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );
