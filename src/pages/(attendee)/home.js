@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import Event from "../../components/(attendee)/event";
 import SearchBar from "../../components/(universal)/searchBar";
 import { fetchEvents } from "../../utils/fetchEvents";
+import { getUserData } from "../../utils/getUserData";
 
 const Home = () => {
     const [events, setEvents] = useState([]);
-
+    const [user, setUser] = useState({});
+    
     useEffect(() => {
         const fetchEventsData = async () => {
             try {
@@ -19,6 +21,8 @@ const Home = () => {
             };
         };
 
+        setUser(getUserData);
+
         // Check if events data exists in localStorage
         const cachedEvents = JSON.parse(localStorage.getItem('eventsData'));
         if (cachedEvents) {
@@ -30,13 +34,14 @@ const Home = () => {
 
     return(
         <div className="page-container">
-            <p>Hi there, User</p>
+            <p>Hi there, {user ? user.first_name : "User"}</p>
             <SearchBar />
 
             <div className="events-container">
-                {events.map(event => (
+                {events && events.map(event => (
                     <Event 
                         key={event.event_id}
+                        id={event.event_id}
                         name={event.title}
                         rate={event.price}
                         date={event.event_timestamp}
