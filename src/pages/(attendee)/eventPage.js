@@ -45,7 +45,8 @@ const EventPage = () => {
         navigate("/organizerProfile", {
             state: {
                 organizer,
-                organizer_logo
+                organizer_logo,
+                id
         }})
     }
 
