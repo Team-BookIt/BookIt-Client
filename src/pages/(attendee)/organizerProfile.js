@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     MdEmail, 
     MdLanguage, 
     MdPhone,
 } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+import { getOrganizerProfile } from "../../utils/getOrganizerProfile";
 
 import Header from "../../components/(attendee)/header";
 import SideBar from "../../components/(universal)/sideBar";
@@ -12,8 +13,39 @@ import Event from "../../components/(attendee)/event"
 
 const OrganizerProfile = () => {
     const location = useLocation();
+    const [filter, setFilter] = useState("all");
+    const [organizerEvents, setOrganizerEvents] = useState([]);
+    const [pastEvents, setPastEvents] = useState([]);
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const { organizer, organizer_logo, id } = location.state || {};
 
-    const { organizer, organizer_logo } = location.state || {};
+    const handleAllClick = () => setFilter("all");
+    const handlePastClick = () => setFilter("past");
+    const handleUpcomingClick = () => setFilter("upcoming");
+
+    useEffect(() => {
+        const getOrganizerEvents = async () => {
+            const organizerProfile = await getOrganizerProfile(id);
+            setOrganizerEvents(organizerProfile.organizerEventDetails);
+            console.log("Organizer events:", organizerProfile.organizerEventDetails);
+        };
+
+        const now = Date.now();
+
+        const upcoming = organizerEvents.filter(event => {
+            const date = new Date(event.event_timestamp);
+            return date.getTime() > now;
+        })
+ 
+        const past = organizerEvents.filter(event => {
+            const date = new Date(event.event_timestamp);
+            return date.getTime() < now;
+        })
+
+        getOrganizerEvents();
+        setPastEvents(past);
+        setUpcomingEvents(upcoming);
+    }, [])
     return(
         <div className="parent-container">
             <Header title={`${organizer} - Profile`} />
@@ -66,22 +98,70 @@ const OrganizerProfile = () => {
                     <div>
                         <p className="custom-underline">Events</p>
                         <div className="selector-container">
-                            <p>Upcoming</p>
-                            <p>Past</p>
+                            <p 
+                                className={filter === "all" && "active-filter"}
+                                onClick={handleAllClick}
+                            >
+                                All
+                            </p>
+
+                            <p 
+                                className={filter === "upcoming" && "active-filter"}
+                                onClick={handleUpcomingClick}
+                            >   
+                                Upcoming
+                            </p>
+
+                            <p 
+                                className={filter === "past" && "active-filter"}
+                                onClick={handlePastClick}
+                            >
+                                Past
+                            </p>
                         </div>
 
-                        <div>
-                            <Event
-                                name={"Code fest"}
-                                rate={20}
-                                date={10/10/2024}
-                                venue={"Kumapley Auditorium"}
-                                time={"10:30 AM"}
-                                description={"The biggest coding event on campus"}
-                                categories={["Tech", "Fun", "Party"]}
-                                id={1} 
-                                isEnded
-                            />
+                        <div className="events-container">
+                            {filter === "all" && organizerEvents.map((event) => (
+                                <Event
+                                    key={event.id}
+                                    name={event.title}
+                                    rate={20}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    description={event.bio}
+                                    categories={["Tech", "Fun", "Party"]}
+                                    id={1} 
+                                    isEnded
+                                />
+                            ))}
+
+                            {filter === "past" && pastEvents.map((event) => (
+                                <Event
+                                    key={event.id}
+                                    name={event.title}
+                                    rate={20}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    description={event.bio}
+                                    categories={["Tech", "Fun", "Party"]}
+                                    id={1} 
+                                    isEnded
+                                />
+                            ))}
+
+                            {filter === "upcoming" && upcomingEvents.map((event) => (
+                                <Event
+                                    key={event.id}
+                                    name={event.title}
+                                    rate={20}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    description={event.bio}
+                                    categories={["Tech", "Fun", "Party"]}
+                                    id={1} 
+                                    isEnded
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>
