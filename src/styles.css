@@ -1007,6 +1007,7 @@ section :nth-child(even) .section-text-container {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: -50px;
 } 
 
 .selector-container p {
@@ -1015,4 +1016,9 @@ section :nth-child(even) .section-text-container {
     border: 1px #FFC107 solid;
     border-radius: 100px;
     cursor: pointer;
+}
+
+.selector-container p:hover, .active-filter {
+    background-color: #FFC107;
+    color: #fff;
 }
