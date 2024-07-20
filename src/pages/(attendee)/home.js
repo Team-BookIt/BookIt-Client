@@ -44,8 +44,7 @@ const Home = () => {
                         id={event.event_id}
                         name={event.title}
                         rate={event.price}
-                        date={event.event_timestamp}
-                        time={event.event_timestamp} 
+                        timestamp={event.event_timestamp}
                         venue={event.venue}
                         description={event.bio}
                         organizer={event.organizer_name}
