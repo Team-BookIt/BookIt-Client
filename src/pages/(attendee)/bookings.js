@@ -4,19 +4,31 @@ import BookedEvent from "../../components/(attendee)/bookedEvent";
 import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
 
 const Bookings = () => {
-    const [bookedEvents, setBookedEvents] = useState({});
+    const [bookedEvents, setBookedEvents] = useState([]);
 
     useEffect(() => {
-        setBookedEvents(getUserBookedEvents);
+        const getBookings = async () => {
+            const bookings = await getUserBookedEvents();
+            setBookedEvents(bookings);
+            console.log("Booked events:", bookings);
+        }
+
+        getBookings();
     }, [])
+
     return (
         <div className="page-container">
             <p>Events you've signed up for</p>
             <SearchBar />
 
             <div className="events-container">
-                {bookedEvents && bookedEvents.map(() => (
-                    <BookedEvent />
+                {bookedEvents && bookedEvents.map((event) => (
+                    <BookedEvent 
+                        key={event.event_id} 
+                        name={event.title} 
+                        venue={event.venue} 
+                        daysLeft={event.event_timestamp} 
+                    />
                 ))}
             </div>
         </div>
