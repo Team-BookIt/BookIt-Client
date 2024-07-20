@@ -2,12 +2,12 @@
 import React from "react";
 import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { formatTimestamp } from "../../utils/formatTimestamp";
 
 const Event = ({
     name, 
     rate,
-    date, 
-    time, 
+    timestamp, 
     venue, 
     description, 
     organizer, 
@@ -18,6 +18,7 @@ const Event = ({
 }) => {
     const navigate = useNavigate();
 
+    const {date, time} = formatTimestamp(timestamp);
     rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
 
     const handleEventPress = () => {
