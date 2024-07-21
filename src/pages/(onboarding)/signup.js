@@ -11,6 +11,7 @@ import sideImage from "../../assets/onboarding-2.png";
 const Signup = () => {
     const navigate = useNavigate();
     const backendRoute = process.env.BOOKIT_BACKEND_URL;
+    const backend = "https://book-it-server-sigma.vercel.app/";
 
     // to keep track of which type of user is signing up: attendee or organizer
     const [userType, setUserType] = useState("attendee"); 
@@ -55,12 +56,12 @@ const Signup = () => {
         // check if both passwords match
         if (attendeeDetails.password === passwordConfirm) {
             try {
-                const response = await axios.post(`${backendRoute}auth/user/signup`, attendeeDetails);
+                const response = await axios.post(`https://book-it-server-sigma.vercel.app/auth/user/signup`, attendeeDetails);
                 console.log(response.data);
                 
-                if (response.data.message === "User created successfull") {
-                    alert("Signed up successfully!");
+                if (response.data.message === "User created successfully") {
                     navigate("/mainPage");
+                    alert("Signed up successfully!");
                 } else {
                     alert(`${response.data.message}`);
                 }

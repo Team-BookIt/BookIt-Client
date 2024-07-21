@@ -1016,3 +1016,74 @@ section :nth-child(even) .section-text-container {
     border-radius: 100px;
     cursor: pointer;
 }
+
+/* Settings pages */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20;
+    margin-top: 45px;
+}
+
+.settings-container .pic-upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgb(191, 191, 191);
+    }
+    
+.settings-container .profile-image {
+    border-radius: 50%;
+    background-color: #007bff;
+    padding: 20px;
+    font-size: 2em;
+    color: white;
+}
+    
+.settings-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgb(191, 191, 191);
+}
+
+.settings-field-text {
+
+    .main-text {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .sub-text {
+        font-size: .9em;
+        font-weight: lighter;
+    }
+}
+
+.password {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.edit-button {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.edit-button:hover {
+    background-color: #dbdbdb;
+}
+
+.upload-icon {
+    margin-left: 10px;
+}

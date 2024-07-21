@@ -6,8 +6,9 @@ import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
 const Bookings = () => {
     const [bookedEvents, setBookedEvents] = useState({});
 
-    useEffect(() => {
+    useEffect(async() => {
         setBookedEvents(getUserBookedEvents);
+        console.log(bookedEvents);
     }, [])
     return (
         <div className="page-container">

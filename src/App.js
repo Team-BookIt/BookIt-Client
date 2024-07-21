@@ -10,6 +10,7 @@ import AccountVerification from './pages/(onboarding)/accountVerification';
 import Main from './pages/(attendee)/index';
 import EventPage from './pages/(attendee)/eventPage';
 import OrganizerProfile from './pages/(attendee)/organizerProfile';
+import AttendeeSettings from './pages/(attendee)/settings';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/mainPage" element={<Main />} />
         <Route path="/eventPage" element={<EventPage />} />
         <Route path="/organizerProfile" element={<OrganizerProfile />} />
+        <Route path="/attendee" element={<AttendeeSettings />} />
       </Routes>
     </Router>
   );
