@@ -311,6 +311,13 @@ section :nth-child(even) .section-text-container {
     position: relative;
 }
 
+.onboarding-main form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .onboarding-img-container {
     width: 50vw;
     height: 100vh;
@@ -568,6 +575,9 @@ section :nth-child(even) .section-text-container {
     font-weight: 400;
     font-size: 15px;
     color: #4d4d4d;
+    white-space: nowrap; /* Prevents text from wrapping to the next line */
+    overflow: hidden; /* Hides any text that overflows the container */
+    text-overflow: ellipsis; /* Adds an ellipsis (...) to indicate that the text has been truncated */    
 }
 
 .event-details {
@@ -1265,3 +1275,102 @@ section :nth-child(even) .section-text-container {
     align-self: center; 
     margin-top: 10px;
 }
+
+
+/* toast message */
+.toast-message {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 5px;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+  
+.toast-message-text {
+    margin: 0;
+    padding: 0;
+}
+  
+.toast-success {
+    background-color: #4caf50;
+}
+  
+.toast-error {
+    background-color: #f44336;
+}
+  
+.toast-info {
+    background-color: #2196f3;
+}
+  
+.toast-warning {
+    background-color: #ff9800;
+}
+
+
+/* ReviewModal */
+
+.ReactModal__Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ReactModal__Content {
+    position: relative;
+    background: #fff;
+    border-radius: 10px;
+    outline: none;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: auto;
+  }
+  
+  .review-form {
+    text-align: center;
+  }
+  
+  .review-form h2 {
+    margin-bottom: 20px;
+  }
+  
+  .review-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  
+  .review-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+  }
+  
+  .review-form button {
+    padding: 10px 20px;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

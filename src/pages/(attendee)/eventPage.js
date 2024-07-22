@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     MdAccessTime, 
     MdLocationOn, 
     MdCalendarMonth, 
-    MdMoney, 
     MdEmail, 
     MdLanguage, 
     MdPhone,
@@ -15,15 +14,16 @@ import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import PrimaryButton from "../../components/primaryButton";
 import AttendeeReview from "../../components/(attendee)/attendeeReview";
+import ReviewModal from "../../components/(attendee)/reviewModal";
 import { bookEvent } from "../../utils/bookEvent";
-
 
 const EventPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const {
         name,
-        rate,
         date,
         time,
         venue,
@@ -35,20 +35,36 @@ const EventPage = () => {
         id
     } = location.state || {};
 
+    const openModal = () => {
+        setIsReviewModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsReviewModalOpen(false);
+    };
+
     const handleBookEvent = () => {
         bookEvent(id);
-        alert("Event booked successfullly");
+        alert("Event booked successfully");
         navigate("/mainPage");
     };
 
     const handleViewOrganizerProfile = () => {
         navigate("/organizerProfile", {
             state: {
+                name,
+                date,
+                time,
+                venue,
+                description,
                 organizer,
                 organizer_logo,
+                categories,
+                isEnded,
                 id
-        }})
-    }
+            }
+        });
+    };
 
     return (
         <div className="parent-container">
@@ -67,10 +83,6 @@ const EventPage = () => {
                         <div className="event-detail">
                             <MdLocationOn />
                             <p>{venue}</p>
-                        </div>
-                        <div className="event-detail">
-                            <MdMoney />
-                            <p>{rate}</p>
                         </div>
                         <div className="event-detail">
                             <MdCalendarMonth />
@@ -99,15 +111,15 @@ const EventPage = () => {
                                 <p>{organizer.name}</p>
                                 <div className="event-organizer-detail">
                                     <MdEmail />
-                                    <p>{organizer}</p>
+                                    <p>{organizer.email}</p>
                                 </div>
                                 <div className="event-organizer-detail">
                                     <MdLanguage />
-                                    <p>{organizer}</p>
+                                    <p>{organizer.website}</p>
                                 </div>
                                 <div className="event-organizer-detail">
                                     <MdPhone />
-                                    <p>{organizer}</p>
+                                    <p>{organizer.phone}</p>
                                 </div>
 
                                 <div>
@@ -139,7 +151,7 @@ const EventPage = () => {
                         <div>
                             <div className="reviews-header">
                                 <p className="custom-underline">Reviews</p>
-                                <div className="review-button">
+                                <div className="review-button" onClick={openModal}>
                                     <MdChat />
                                     <p>Leave a review</p>
                                 </div>
@@ -163,8 +175,9 @@ const EventPage = () => {
                     )}
                 </div>
             </div>
+            <ReviewModal isOpen={isReviewModalOpen} onRequestClose={closeModal} />
         </div>
-    )
-}
+    );
+};
 
 export default EventPage;

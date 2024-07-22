@@ -1,12 +1,11 @@
 // Event.js
 import React from "react";
-import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney } from "react-icons/md";
+import { MdAccessTime, MdLocationOn, MdCalendarMonth } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { formatTimestamp } from "../../utils/formatTimestamp";
 
 const Event = ({
     name, 
-    rate,
     timestamp, 
     venue, 
     description, 
@@ -14,19 +13,17 @@ const Event = ({
     organizer_logo, 
     categories, 
     id, 
-    isEnded
+    image
 }) => {
     const navigate = useNavigate();
 
-    const {date, time} = formatTimestamp(timestamp);
-    rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
+    const {date, time, isEnded} = formatTimestamp(timestamp);
 
     const handleEventPress = () => {
         navigate("/eventPage", {
             state: {
                 id,
                 name,
-                rate,
                 date,
                 time,
                 venue,
@@ -38,11 +35,12 @@ const Event = ({
             }
         });
     };
+    
 
     return (
         <div className="event-container">
             <div className="event-header">
-                <img alt="event flyer" />
+                <img src={image} alt="event flyer" />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
@@ -61,10 +59,6 @@ const Event = ({
                     <div className="event-detail">
                         <MdCalendarMonth />
                         <p>{date}</p>
-                    </div>
-                    <div className="event-detail">
-                        <MdMoney />
-                        <p>{rate}</p>
                     </div>
                 </div>
                 

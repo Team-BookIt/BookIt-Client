@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import PrimaryButton from "../../components/primaryButton";
+import ToastMessage from "../../components/(universal)/toast";
 
 import logo from "../../assets/logo.png";
 import sideImage from "../../assets/onboarding-2.png";
 
-
-const Signup = () => {
+const Signup = ({ onSuccess }) => {
     const navigate = useNavigate();
     const backendRoute = process.env.REACT_APP_BOOKIT_BACKEND_URL;
 
     // to keep track of which type of user is signing up: attendee or organizer
-    const [userType, setUserType] = useState("attendee"); 
+    const [userType, setUserType] = useState("attendee");
 
     // to keep the content of the attendee signup form
     const [attendeeDetails, setAttendeeDetails] = useState({
@@ -33,6 +33,17 @@ const Signup = () => {
     // to keep the second password input for confirmation
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
+    const [showToast, setShowToast] = useState(false);
+
+    const handleShowToast = () => {
+        setShowToast(true);
+    };
+
+    const handleCloseToast = () => {
+        onSuccess();
+        setShowToast(false);
+    };
+
     const handleAttendeeInputChange = (event) => {
         const { name, value } = event.target;
         setAttendeeDetails({
@@ -46,9 +57,9 @@ const Signup = () => {
         setOrganizerDetails({
             ...organizerDetails,
             [name]: value
-        })
-    }
-    
+        });
+    };
+
     const handleAttendeeSignup = async (event) => {
         event.preventDefault();
 
@@ -56,11 +67,15 @@ const Signup = () => {
         if (attendeeDetails.password === passwordConfirm) {
             try {
                 const response = await axios.post(`${backendRoute}/auth/user/signup`, attendeeDetails);
-                console.log(response.data);
-                
+                console.log("Response:", response.data);
+
                 if (response.data.message === "User created successfully") {
-                    navigate("/mainPage");
-                    alert("Signed up successfully!");
+                    console.log("User info:", response.data.user);
+                    localStorage.setItem("user", JSON.stringify(response.data.user));
+                    handleShowToast();
+                    setTimeout(() => {
+                        navigate("/mainPage");
+                    }, 2000);
                 } else {
                     alert(`${response.data.message}`);
                 }
@@ -70,38 +85,41 @@ const Signup = () => {
         } else {
             alert("Password mismatch!");
         }
-
     };
-    
-    const hanldeOrganizerSignup = async (event) => {
+
+    const handleOrganizerSignup = async (event) => {
         event.preventDefault();
-        
+
         if (organizerDetails.password === passwordConfirm) {
             try {
                 const response = await axios.post(`${backendRoute}/auth/org/signup`, organizerDetails);
-                console.log(response.data);
+                console.log("Response:", response.data);
 
                 if (response.data.message === "Organizer registered successfully") {
-                    navigate("/dashboard");
-                    alert("Signed up successfully!");
+                    console.log("Organizer info:", response.data.organizer[0]);
+                    localStorage.setItem("organizer", JSON.stringify(response.data.user));
+                    handleShowToast();
+                    setTimeout(() => {
+                        navigate("/dashboard");
+                    }, 2000);
                 } else {
                     alert(`${response.data.message}`);
                 }
             } catch (error) {
-                console.log(error);
+                console.log("Error signing organizer up:", error);
             }
         } else {
             alert("Password mismatch!");
         }
-    }
-    
+    };
+
     const handleLoginPress = () => {
         navigate("/login");
-    }
+    };
 
-    return(
+    return (
         <div className="onboarding-container">
-            <img src={sideImage} className="onboarding-img-container" alt="people at an event"/>
+            <img src={sideImage} className="onboarding-img-container" alt="people at an event" />
 
             <div className="onboarding-main">
                 <img src={logo} alt="bookit-logo" />
@@ -117,7 +135,7 @@ const Signup = () => {
                         Attendee
                     </p>
 
-                    <p 
+                    <p
                         onClick={() => setUserType("organizer")}
                         className={userType === "organizer" ? "active" : ""}
                     >
@@ -125,100 +143,107 @@ const Signup = () => {
                     </p>
                 </div>
 
-                {userType === "attendee" && (
-                    <div className="form-container">
-                        <input 
-                            type="text" 
-                            placeholder="First Name" 
-                            name="first_name"
-                            value={attendeeDetails.first_name}
-                            onChange={handleAttendeeInputChange}
-                            required
-                        />
+                <form onSubmit={userType === "attendee" ? handleAttendeeSignup : handleOrganizerSignup}>
+                    {userType === "attendee" && (
+                        <div className="form-container">
+                            <input
+                                type="text"
+                                placeholder="First Name"
+                                name="first_name"
+                                value={attendeeDetails.first_name}
+                                onChange={handleAttendeeInputChange}
+                                required
+                            />
 
-                        <input 
-                            type="text" 
-                            placeholder="Last Name" 
-                            name="last_name"
-                            value={attendeeDetails.last_name} 
-                            onChange={handleAttendeeInputChange}
-                            required
-                        />
+                            <input
+                                type="text"
+                                placeholder="Last Name"
+                                name="last_name"
+                                value={attendeeDetails.last_name}
+                                onChange={handleAttendeeInputChange}
+                                required
+                            />
 
-                        <input 
-                            type="email" 
-                            placeholder="Email Address"
-                            name="email" 
-                            value={attendeeDetails.email}
-                            onChange={handleAttendeeInputChange}
-                            required
-                        />
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={attendeeDetails.email}
+                                onChange={handleAttendeeInputChange}
+                                required
+                            />
 
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
-                            name="password"
-                            value={attendeeDetails.password} 
-                            onChange={handleAttendeeInputChange}
-                            required
-                        />
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                value={attendeeDetails.password}
+                                onChange={handleAttendeeInputChange}
+                                required
+                            />
 
-                        <input 
-                            type="password" 
-                            placeholder="Confirm Password" 
-                            name="passwordConfirm"
-                            value={passwordConfirm}
-                            onChange={(event) => setPasswordConfirm(event.target.value)}
-                            required
-                        />
-                    </div>
-                )}
-                
-                {userType === "organizer" && (
-                    <div className="form-container">
-                        <input 
-                            type="text" 
-                            placeholder="Company Name" 
-                            name="name" 
-                            value={organizerDetails.name}
-                            onChange={handleOrganizerInputChange}
-                            required
-                        />
-                        
-                        <input 
-                            type="email" 
-                            placeholder="Email Address" 
-                            name="email" 
-                            value={organizerDetails.email}
-                            onChange={handleOrganizerInputChange}
-                            required
-                        />
-                        
-                        <input 
-                            type="password" 
-                            placeholder="Password" 
-                            name="password" 
-                            value={organizerDetails.password}
-                            onChange={handleOrganizerInputChange}
-                            required
-                        />
+                            <input
+                                type="password"
+                                placeholder="Confirm Password"
+                                name="passwordConfirm"
+                                value={passwordConfirm}
+                                onChange={(event) => setPasswordConfirm(event.target.value)}
+                                required
+                            />
+                        </div>
+                    )}
 
-                        <input 
-                            type="password" 
-                            placeholder="Confirm Password" 
-                            name="passwordConfirm" 
-                            value={passwordConfirm}
-                            onChange={(event) => setPasswordConfirm(event.target.value)}
-                            required
-                        />
-                    </div>
-                )}
-                
-                <PrimaryButton 
-                    title={"Signup"} 
-                    onButtonClick={userType === "attendee" ? handleAttendeeSignup : hanldeOrganizerSignup}
-                />
+                    {userType === "organizer" && (
+                        <div className="form-container">
+                            <input
+                                type="text"
+                                placeholder="Company Name"
+                                name="name"
+                                value={organizerDetails.name}
+                                onChange={handleOrganizerInputChange}
+                                required
+                            />
+
+                            <input
+                                type="email"
+                                placeholder="Email Address"
+                                name="email"
+                                value={organizerDetails.email}
+                                onChange={handleOrganizerInputChange}
+                                required
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                value={organizerDetails.password}
+                                onChange={handleOrganizerInputChange}
+                                required
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Confirm Password"
+                                name="passwordConfirm"
+                                value={passwordConfirm}
+                                onChange={(event) => setPasswordConfirm(event.target.value)}
+                                required
+                            />
+                        </div>
+                    )}
+
+                    <PrimaryButton title={"Signup"} />
+                </form>
             </div>
+
+            {showToast && (
+                <ToastMessage
+                    message="Signed up successfully!"
+                    type="success"
+                    onClose={handleCloseToast}
+                />
+            )}
         </div>
     );
 }

@@ -16,9 +16,13 @@ export const formatTimestamp = (timestamp) => {
         minute: "numeric",
         hour12: true,
         timezone: "UTC"
-    }
+    };
 
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
 
-    return {date: formattedDate, time: formattedTime};
-}
+    // determine if the event has ended
+    const now = new Date();
+    const isEnded = date < now;
+
+    return { date: formattedDate, time: formattedTime, isEnded };
+};

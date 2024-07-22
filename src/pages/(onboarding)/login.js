@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import PrimaryButton from "../../components/primaryButton";
+import ToastMessage from "../../components/(universal)/toast";
 
 import logo from "../../assets/logo.png";
 import sideImage from "../../assets/onboarding-1.png";
 
 
 
-const Login = () => {
+const Login = ({ onSuccess }) => {
     const navigate = useNavigate();
     const [userType, setUserType] = useState("attendee");
     const backendRoute = `https://book-it-server-sigma.vercel.app/auth/${userType === "attendee" ? "user" : "org"}/login`;
@@ -18,6 +19,17 @@ const Login = () => {
         email: "",
         password: ""
     });
+
+    const [showToast, setShowToast] = useState(false);
+
+    const handleShowToast = () => {
+        setShowToast(true);
+    };
+
+    const handleCloseToast = () => {
+        onSuccess();
+        setShowToast(false);
+    };
 
     const handleFormValueChange = (event) => {
         const { name, value} = event.target;
@@ -32,13 +44,22 @@ const Login = () => {
     
         try {
             const response = await axios.post(backendRoute, formValues);
-            // if (userType === "attendee") {
-            //     localStorage.setItem("userData", JSON.stringify(response.data.user[0]));
-            //     console.log(response.data.user[0]);
-            // }
-            console.log("Response:", response.data.organizer);
-            userType === "attendee" ? navigate("/mainPage") : navigate("/dashboard");
-            alert("Login successful");
+            console.log("Response:", response.data)
+            if (userType === "attendee") {
+                console.log("User logged in successfully!", response.data.user);
+                localStorage.setItem("user", response.data.user);
+                handleShowToast();
+                setTimeout(() => {
+                    navigate("/mainPage");
+                }, 2000);
+            } else {
+                console.log("Organizer logged in successfully!", response.data.organizer);
+                localStorage.setItem("organizer", response.data.organizer);
+                handleShowToast();
+                setTimeout(() => {
+                    navigate("/dashboard");
+                }, 2000);
+            }
         } catch (error) {
             console.log("Error logging in:", error);
         }
@@ -95,6 +116,14 @@ const Login = () => {
                 </div>                
                 <PrimaryButton title={"Login"} onButtonClick={handleLoginPress}/>
             </div>
+
+            {showToast && (
+                <ToastMessage
+                    message="Logged in successfully!"
+                    type="success"
+                    onClose={handleCloseToast}
+                />
+            )}
         </div>
     );
 }

@@ -11,25 +11,34 @@ const Home = () => {
     useEffect(() => {
         const fetchEventsData = async () => {
             try {
+                // Fetch events from local storage
+                const localEvents = localStorage.getItem("allEvents");
+                
+                // Parse local events if they exist
+                const parsedLocalEvents = localEvents ? JSON.parse(localEvents) : [];
+
+                // Fetch events from backend
                 const eventsData = await fetchEvents();
-                setEvents(eventsData);
-                // Save events data to localStorage
-                localStorage.setItem('eventsData', JSON.stringify(eventsData));
+
+                // Compare backend events with local events
+                if (JSON.stringify(eventsData) !== JSON.stringify(parsedLocalEvents)) {
+                    // Events are different, update state and local storage
+                    setEvents(eventsData);
+                    localStorage.setItem("allEvents", JSON.stringify(eventsData));
+                    console.log("Events fetched and updated successfully:", eventsData);
+                } else {
+                    // Events are the same, use local storage data
+                    setEvents(parsedLocalEvents);
+                    console.log("Events are up-to-date. Using local storage data.");
+                }
             } catch (error) {
                 console.log("Error fetching events:", error);
                 alert("Oops! Couldn't fetch events.");
-            };
+            }
         };
 
-        setUser(getUserData);
-
-        // Check if events data exists in localStorage
-        const cachedEvents = JSON.parse(localStorage.getItem('eventsData'));
-        if (cachedEvents) {
-            setEvents(cachedEvents);
-        } else {
-            fetchEventsData();
-        }
+        setUser(getUserData());
+        fetchEventsData();
     }, []);
 
     return(

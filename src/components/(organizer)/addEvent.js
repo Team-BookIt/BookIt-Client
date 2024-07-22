@@ -4,9 +4,10 @@ import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import Select from "react-select";
 import 'react-datepicker/dist/react-datepicker.css';
+import ToastMessage from '../(universal)/toast';
 
 
-const AddEvent = () => {
+const AddEvent = ({ onSuccess }) => {
 	const backendURL = "https://book-it-server-sigma.vercel.app";
 
 	const [date, setDate] = useState(new Date());
@@ -15,6 +16,16 @@ const AddEvent = () => {
 	const [eventVenue, setEventVenue] = useState('');
 	const [eventCategories, setEventCategories] = useState([]);
 	const [customCategory, setCustomCategory] = useState("");
+	const [showToast, setShowToast] = useState(false);
+
+	const handleShowToast = () => {
+		setShowToast(true);
+	};
+	
+	const handleCloseToast = () => {
+		onSuccess()
+		setShowToast(false);
+	};
 
 	const predefinedCategories = [
 		{ value: "tech", label: "Tech" },
@@ -42,7 +53,7 @@ const AddEvent = () => {
 		const minutes = String(date.getMinutes()).padStart(2, "0");
 		const seconds = String(date.getSeconds()).padStart(2, "0");
 
-		return `${year}-${month}-${day}-${hours}:${minutes}:${seconds}`;
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	};
 
 	const dataToPost = {
@@ -52,11 +63,11 @@ const AddEvent = () => {
 				title: eventTitle,
 				venue: eventVenue,
 				bio: eventDescription,
-				timestamp: formatTimestamp(date),
+				event_timestamp: formatTimestamp(date),
 				price: 0.00
 			},
 		  	additionalEventDetails: {
-				image: ""
+				image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAeFBMVEXqHS3////qGivsP0npABnoAADqESXpAB3pCCDpAA30o6bpABPpABb3vL/72tv0oKP4x8n2sbPuXGPxgobzl5r1rK7wcnfrKTbyi4/rNkH84+TrMDz+9PTxhovweH33wMHtVV3uY2n50NHtTlfsRU/va3HykZP86uud0DF+AAAC1ElEQVRIie2Wa5OqMAyGSWlDubS03ESQi6D4///haQvuWV0dPefLzs5sx8EAeZK0vCl4PvH+YxDf+yaQOJqY/zfDrCChO4uTFlsy8/dBgikA8zw6VINUPb4NJgpWUE9aVulbKR2Ivb+Bg/gn0MPYgYEehZLZ+6WaXA70Ekzi+C3uDsQA7c8eAuQBJ8+D3IBYladzecqqqjyXYxEVu+crfANSkU+yTrXS52W5zKoY8jdBPdWyXwYRqU5qf0DgT3V0l3FkTV9PkR7rSJ0Uk+GrOaIQ1BzrmS7K67JcdMdyX8RR8Ar0KLVnSDxOCUekHAPCvefcN/bjL/gCpOxVR2GYPABpdPnUDDzZfGj4IQPMGkG/gMRfN56Nq2FI1nCQXp3DBqDCL2AAMH2Imh0AWqdFE+4KJhpgT+7BsPXzdnf1oQsoFyXUUMZbFWTXz21MbsF4AjuKlUT/eD5mxg5mY5zcvsd759GsPXoF8QzrcJfx5OyOY+UMt/HZ6u2o+WeQ5zCYi3qbmLZOh4aFkzOULZaZuwCySYMbsD+UNhq0mHAvdCcRtNwcrBETGjBYjD3JL6B24G6nOuo7/+FQVy5LCcdApE/A3IELePb9Ex3s2+Qg5KAaW57UZq4JFA6MbkA8NhbM5cGXtWgWtxD1oLt1PUo2lazJLViu8vq7qos2EXMWNV0KbHT+EWO1MypWKrWwDFKQm6CvYBBlwoI8Mblypp3/JQylM5QLRBwY3ionUXQFQyOEPR/tqkRHgscCBHSzMnNW6fgAjCXbwIN9xNgan86onJ7NAo94MY+nb+YHIJ9WMJhtZQnZGx8rESOdyAhnZxTRhw9Kxay8Zpyseu7BWCjo6QOQpz0bbHU8lMK0jgGjzyAVE+R0NKHvM/Yt76eTPJnvgUzbSJ1XWNkSLyUdGj5f9oSfMfPv+hHthwCGNgYGa/Nt7WMMe5/bUyR43aB+6L76C/5k8A8fzS/J4UmyBAAAAABJRU5ErkJggg=="
 			},
 		},
 		eventCategories: eventCategories.map((category) => category.value),
@@ -65,10 +76,10 @@ const AddEvent = () => {
 
 	const handleSubmit = async(e) => {
 		e.preventDefault();
-		console.log("timestamp:", formatTimestamp(date))
 		try {
 			const response = await axios.post(`${backendURL}/events/create`, dataToPost);
 			console.log("Event created:", response.data);
+			handleShowToast();
 		} catch (error) {
 			console.error("Error creating a new event:", error);
 		}
@@ -165,6 +176,14 @@ const AddEvent = () => {
 
 				<button type="submit" className="event-form-submit-button">Publish Event</button>
 			</form>
+
+			{showToast && (
+				<ToastMessage
+					message="Event created sucessfully!"
+					type="success"
+					onClose={handleCloseToast}
+				/>
+      		)}
 		</div>
 	);
 };

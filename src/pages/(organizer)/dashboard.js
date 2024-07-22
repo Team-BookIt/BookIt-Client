@@ -75,22 +75,6 @@ const Dashboard = () => {
             <Header title={"Dashboard"} />
             <SideBar activePage={"Dashboard"} />
 
-            {showForm && (
-                <div className="modal-overlay" onClick={handleCloseForm}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <AddEvent />
-                    </div>
-                </div>
-            )}
-
-            {showWaitlist && (
-                <div className="modal-overlay" onClick={handleCloseForm}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <EventWaitlist title={eventDetails.title} id={eventDetails.id} key={eventDetails.id} />
-                    </div>
-                </div>
-            )}
-
             <div className="page-container">
                 <p>Details of your events</p>
 
@@ -106,7 +90,7 @@ const Dashboard = () => {
                     <p
                         className={filter === "upcoming" && "active-filter"}
                         onClick={handleUpcomingClick}
-                    >
+                        >
                         Upcoming
                     </p>
 
@@ -131,20 +115,36 @@ const Dashboard = () => {
                                 event_id={event.event_id}
                                 waitlist={45}
                                 onEventPress={handleEventPress}
-                            />
-                        ))}
+                                />
+                            ))}
                     {filter === "past" &&
                         pastEvents.map((event) => (
                             <PastEvent
-                                key={event.id}
-                                name={event.title}
-                                attendees={30}
-                                attendanceRate={"65%"}
-                                reviews={67}
-                                ratings={3.2}
+                            key={event.id}
+                            name={event.title}
+                            attendees={30}
+                            attendanceRate={"65%"}
+                            reviews={67}
+                            ratings={3.2}
                             />
                         ))}
                 </div>
+                
+                {showForm && (
+                    <div className="modal-overlay" onClick={handleCloseForm}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <AddEvent onSuccess={handleCloseForm} />
+                        </div>
+                    </div>
+                )}
+    
+                {showWaitlist && (
+                    <div className="modal-overlay" onClick={handleCloseForm}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                            <EventWaitlist title={eventDetails.title} id={eventDetails.id} key={eventDetails.id} />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
