@@ -7,8 +7,8 @@ import {
 import { useLocation } from "react-router-dom";
 import { getOrganizerProfile } from "../../utils/getOrganizerProfile";
 
-import Header from "../../components/(attendee)/header";
-import SideBar from "../../components/(universal)/sideBar";
+import Header from "../../components/(universal)/header";
+import SideBar from "../../components/(attendee)/sideBar";
 import Event from "../../components/(attendee)/event"
 
 const OrganizerProfile = () => {
@@ -45,7 +45,7 @@ const OrganizerProfile = () => {
         getOrganizerEvents();
         setPastEvents(past);
         setUpcomingEvents(upcoming);
-    }, [])
+    }, [organizerEvents, id])
     return(
         <div className="parent-container">
             <Header title={`${organizer} - Profile`} />
@@ -54,7 +54,7 @@ const OrganizerProfile = () => {
             <div className="event-page">
                 <div className="organizer-profile-header">
                     <div>
-                        <img src={organizer_logo} alt="profile-picture"/>
+                        <img src={organizer_logo} alt="profile"/>
                     </div>
 
                     <div className="orgnanizer-stats-container">

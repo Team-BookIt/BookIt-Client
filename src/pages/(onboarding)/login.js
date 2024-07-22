@@ -32,11 +32,13 @@ const Login = () => {
     
         try {
             const response = await axios.post(backendRoute, formValues);
-            localStorage.setItem("userData", JSON.stringify(response.data.user[0]));
-            console.log(response.data);
-            console.log(response.data.user[0]);
+            // if (userType === "attendee") {
+            //     localStorage.setItem("userData", JSON.stringify(response.data.user[0]));
+            //     console.log(response.data.user[0]);
+            // }
+            console.log("Response:", response.data.organizer);
+            userType === "attendee" ? navigate("/mainPage") : navigate("/dashboard");
             alert("Login successful");
-            navigate("/mainPage");
         } catch (error) {
             console.log("Error logging in:", error);
         }
@@ -48,10 +50,10 @@ const Login = () => {
 
     return(
         <div className="onboarding-container">
-            <img src={sideImage} className="onboarding-img-container" />
+            <img src={sideImage} className="onboarding-img-container" alt="people toasting at an event" />
 
             <div className="onboarding-main">
-                <img src={logo} />
+                <img src={logo} alt="bookit logo" />
                 <p>
                     Don't have an account? <span onClick={handleSignupPress}>Create one.</span>
                 </p>

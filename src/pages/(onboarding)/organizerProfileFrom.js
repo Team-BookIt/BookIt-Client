@@ -17,10 +17,10 @@ const OrganizerProfileForm = () => {
 
     return(
         <div className="onboarding-container">
-            <img src={sideImage} className="onboarding-img-container" />
+            <img src={sideImage} className="onboarding-img-container" alt="people toasting at an event" />
 
             <div className="onboarding-main">
-                <img src={logo} />
+                <img src={logo} alt="bookit logo" />
                 <p>
                     Organizer Profile Completion.
                 </p>

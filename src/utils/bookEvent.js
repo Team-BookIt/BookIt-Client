@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getUserData } from "./getUserData";
 
-const backendURL = process.env.REACT_APP_BOOKIT_BACKEND_URL;
+const backendURL = "https://book-it-server-sigma.vercel.app";
 
 
 export const bookEvent = async (eventID) => {

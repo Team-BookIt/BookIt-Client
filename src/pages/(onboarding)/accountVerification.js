@@ -16,10 +16,10 @@ const AccountVerification = () => {
     }
     return(
         <div className="onboarding-container">
-            <img src={sideImage} className="onboarding-img-container" />
+            <img src={sideImage} className="onboarding-img-container" alt="people toasting at an event" />
 
             <div className="onboarding-main">
-                <img src={logo} />
+                <img src={logo} alt="bookit logo" />
                 <p>
                     Account Verification.
                 </p>
@@ -41,7 +41,7 @@ const AccountVerification = () => {
 
                 <div className="verification-footer">
                     <p>
-                        Didn't get the code? <br/> Let us <a href="#">resend</a>
+                        Didn't get the code? <br/> Let us <a href="/dashboard">resend</a>
                     </p>
                     
                     <PrimaryButton title={"Verify"} onButtonClick={handleVerifyPress}/>

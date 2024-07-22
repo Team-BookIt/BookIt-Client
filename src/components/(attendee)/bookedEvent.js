@@ -7,7 +7,7 @@ const BookedEvent = ({name, venue, daysLeft}) => {
     return (
         <div className="booked-event-container">
             <div className="image-container">
-                <img src={image} alt="event-image"/>
+                <img src={image} alt="event flyer"/>
             </div>
 
             <div className="booked-event-details-container">

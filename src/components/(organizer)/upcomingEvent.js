@@ -1,42 +1,29 @@
-// Event.js
+// UpcomingEvent.jsx
 import React from "react";
-import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdMoney, MdPerson } from "react-icons/md";
 import { formatTimestamp } from "../../utils/formatTimestamp";
 
-const Event = ({
-    name, 
+const UpcomingEvent = ({
+    name,
     rate,
-    timestamp, 
-    venue, 
-    description, 
-    organizer, 
-    organizer_logo, 
-    categories, 
-    id, 
-    isEnded
+    timestamp,
+    venue,
+    description,
+    categories,
+    waitlist,
+    event_id,
+    onEventPress,
 }) => {
-    const navigate = useNavigate();
-
-    const {date, time} = formatTimestamp(timestamp);
+    const { date, time } = formatTimestamp(timestamp);
     rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
 
     const handleEventPress = () => {
-        navigate("/eventPage", {
-            state: {
-                id,
-                name,
-                rate,
-                date,
-                time,
-                venue,
-                description,
-                organizer,
-                organizer_logo,
-                categories,
-                isEnded
-            }
-        });
+        const eventData = {
+            title: name,
+            id: event_id,
+        };
+        onEventPress(eventData);
+        console.log("Event data:", eventData);
     };
 
     return (
@@ -66,8 +53,12 @@ const Event = ({
                         <MdMoney />
                         <p>{rate}</p>
                     </div>
+                    <div className="event-detail">
+                        <MdPerson />
+                        <p>{waitlist} people on waitlist</p>
+                    </div>
                 </div>
-                
+
                 {categories[0] !== null && (
                     <div className="categories-container">
                         <p>Categories</p>
@@ -83,4 +74,4 @@ const Event = ({
     );
 };
 
-export default Event;
+export default UpcomingEvent;

@@ -11,8 +11,8 @@ import {
     MdPerson,
     MdChat
 } from "react-icons/md";
-import Header from "../../components/(attendee)/header";
-import SideBar from "../../components/(universal)/sideBar";
+import Header from "../../components/(universal)/header";
+import SideBar from "../../components/(attendee)/sideBar";
 import PrimaryButton from "../../components/primaryButton";
 import AttendeeReview from "../../components/(attendee)/attendeeReview";
 import { bookEvent } from "../../utils/bookEvent";

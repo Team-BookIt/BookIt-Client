@@ -751,7 +751,29 @@ section :nth-child(even) .section-text-container {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     max-width: 500px;
     margin: 0 auto;
+    height: 70vh;
+    overflow: scroll;
 }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it is on top */
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1010; /* Above the overlay */
+  }
   
 .event-form-header {
     display: flex;
@@ -1007,7 +1029,6 @@ section :nth-child(even) .section-text-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: -50px;
 } 
 
 .selector-container p {
@@ -1021,4 +1042,226 @@ section :nth-child(even) .section-text-container {
 .selector-container p:hover, .active-filter {
     background-color: #FFC107;
     color: #fff;
+    transition: 0.3s;
+}
+
+
+/* Settings pages */
+.settings-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20;
+    margin-top: 45px;
+}
+
+.settings-container .pic-upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgb(191, 191, 191);
+    }
+    
+.settings-container .profile-image {
+    border-radius: 50%;
+    background-color: #007bff;
+    padding: 20px;
+    font-size: 2em;
+    color: white;
+}
+    
+.settings-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-bottom: 35px;
+    border-bottom: 1px solid rgb(191, 191, 191);
+}
+
+.settings-field-text {
+
+    .main-text {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .sub-text {
+        font-size: .9em;
+        font-weight: lighter;
+    }
+}
+
+.password {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.edit-button {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.edit-button:hover {
+    background-color: #dbdbdb;
+}
+
+.edit-button input {
+    display: none;
+}
+
+.upload-icon {
+    margin-left: 10px;
+}
+
+
+/* organizer dashboard */
+.dashboard-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 60px;
+}
+
+.add-event-button {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #FFC107;
+    padding: 20px;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 2px 3px 0 #565656;
+}
+
+.add-event-button p {
+    margin-right: 10px;
+}
+
+
+/* confirmation modal */
+.confirmation-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.confirmation-modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+}
+
+.confirmation-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.confirmation-modal-icon {
+    margin-right: 10px;
+    font-size: 24px; 
+}
+
+.confirmation-modal-message {
+    font-size: 18px;
+    text-align: center;
+}
+
+.confirmation-modal-actions {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.confirmation-modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.confirmation-yes-button {
+    background-color: #4caf50; 
+    color: white;
+}
+
+.confirmation-yes-button:hover {
+    background-color: #45a049;
+}
+
+.confirmation-no-button {
+    background-color: #f44336; 
+    color: white;
+}
+
+.confirmation-no-button:hover {
+    background-color: #e53935;
+}
+
+
+/* edit field modal */
+.edit-field-container {
+    width: 50vw;
+}
+
+.edit-field-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.edit-field-heading p{
+    font-size: 20px;
+}
+
+.edit-field-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-field-form input {
+    width: 100%;
+    font-size: 18px;
+    margin: 10px 0;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px #929292 solid;
+    box-shadow: 0 2px 3px 0 #565656;    
+}
+
+.edit-field-form button {
+    width: 60%;
+    background-color: #FFC107;
+    border: 0;
+    box-shadow: 0 2px 3px 0 #565656;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;   
+    align-self: center; 
+    margin-top: 10px;
 }
