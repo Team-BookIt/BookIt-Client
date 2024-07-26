@@ -30,6 +30,7 @@ const EventPage = () => {
         description,
         organizer,
         organizer_logo,
+        orgID,
         categories,
         isEnded,
         id
@@ -61,9 +62,16 @@ const EventPage = () => {
                 organizer_logo,
                 categories,
                 isEnded,
-                id
+                orgID
             }
         });
+    };
+
+    const review = {
+        imageUrl: "https://example.com/image.jpg",
+        name: "Tommy M. Laird",
+        rating: 4, // Rating out of 5
+        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
     };
 
     return (
@@ -108,18 +116,18 @@ const EventPage = () => {
                                 <img src={organizer_logo} alt="organizer-logo" className="organizer-logo" onClick={() => alert(organizer_logo)}/> 
                             )}
                             <div className="event-organizer-details">
-                                <p>{organizer.name}</p>
+                                <p>{organizer}</p>
                                 <div className="event-organizer-detail">
                                     <MdEmail />
-                                    <p>{organizer.email}</p>
+                                    <p>{organizer}</p>
                                 </div>
                                 <div className="event-organizer-detail">
                                     <MdLanguage />
-                                    <p>{organizer.website}</p>
+                                    <p>{organizer}</p>
                                 </div>
                                 <div className="event-organizer-detail">
                                     <MdPhone />
-                                    <p>{organizer.phone}</p>
+                                    <p>{organizer}</p>
                                 </div>
 
                                 <div>
@@ -159,16 +167,16 @@ const EventPage = () => {
 
                             <div>
                                 <AttendeeReview 
-                                    rating={4.5} 
-                                    review={"Had a great time. Would definitely want to go again."} 
+                                    review={review} 
                                 />
                                 <AttendeeReview 
-                                    rating={4.5} 
-                                    review={"Had a great time. Would definitely want to go again."} 
+                                    review={review} 
                                 />
                                 <AttendeeReview 
-                                    rating={4.5} 
-                                    review={"Had a great time. Would definitely want to go again."} 
+                                    review={review} 
+                                />
+                                <AttendeeReview 
+                                    review={review} 
                                 />
                             </div>
                         </div>

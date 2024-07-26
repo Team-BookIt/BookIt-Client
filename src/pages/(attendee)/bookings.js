@@ -27,7 +27,8 @@ const Bookings = () => {
                         key={event.event_id} 
                         name={event.title} 
                         venue={event.venue} 
-                        daysLeft={event.event_timestamp} 
+                        timestamp={event.event_timestamp} 
+                        image={event.image}
                     />
                 ))}
             </div>

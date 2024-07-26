@@ -13,7 +13,8 @@ const Event = ({
     organizer_logo, 
     categories, 
     id, 
-    image
+    image,
+    orgID
 }) => {
     const navigate = useNavigate();
 
@@ -31,9 +32,11 @@ const Event = ({
                 organizer,
                 organizer_logo,
                 categories,
-                isEnded
+                isEnded,
+                orgID
             }
         });
+        console.log("Organizer:", organizer);
     };
     
 

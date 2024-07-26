@@ -1,27 +1,27 @@
 import React from "react";
-import { MdStar } from "react-icons/md";
 
-const AttendeeReview = ({ rating, review }) => {
-    return(
-        <div className="attendee-review-container">
-            <div className="attendee-review-container-header">
-                <div className="profile-pic-and-name">
-                    <img alt="user-profile-pic"/>
-                    <div>
-                        <p>Reviewer's name</p>
-                        <p>Reviewer's email address</p>
+const AttendeeReview = ({ review }) => {
+    const renderStars = (rating) => {
+        const stars = Array.from({ length: 5 }, (_, index) => (
+            <span key={index} className={index < rating ? "star-filled" : "star-empty"}>
+                {index < rating ? "★" : "☆"}
+            </span>
+        ));
+        return stars;
+    };
+
+    return (
+        <div className="review">
+            <div className="review-header">
+                <img src={review.imageUrl} alt={review.name} className="review-image" />
+                <div className="review-info">
+                    <div className="review-rating">
+                        {renderStars(review.rating)}
                     </div>
-                </div>
-
-                <div>
-                    <MdStar />
-                    <p>{rating}</p>
+                    <div className="review-author">{review.name}</div>
                 </div>
             </div>
-
-            <div>
-                <p>{review}</p>
-            </div>
+            <p className="review-content">{review.content}</p>
         </div>
     );
 };

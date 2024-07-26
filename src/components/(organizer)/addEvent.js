@@ -7,12 +7,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ToastMessage from '../(universal)/toast';
 
 
-const AddEvent = ({ onSuccess }) => {
+const AddEvent = ({ orgID, onSuccess }) => {
 	const backendURL = "https://book-it-server-sigma.vercel.app";
 
 	const [date, setDate] = useState(new Date());
 	const [eventTitle, setEventTitle] = useState('');
 	const [eventDescription, setEventDescription] = useState('');
+	const [image, setImage] = useState('');
 	const [eventVenue, setEventVenue] = useState('');
 	const [eventCategories, setEventCategories] = useState([]);
 	const [customCategory, setCustomCategory] = useState("");
@@ -57,7 +58,7 @@ const AddEvent = ({ onSuccess }) => {
 	};
 
 	const dataToPost = {
-		organizerID: 5,
+		organizerID: orgID,
 		eventDetails: {
 			coreEventDetails: {
 				title: eventTitle,
@@ -67,11 +68,17 @@ const AddEvent = ({ onSuccess }) => {
 				price: 0.00
 			},
 		  	additionalEventDetails: {
-				image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAeFBMVEXqHS3////qGivsP0npABnoAADqESXpAB3pCCDpAA30o6bpABPpABb3vL/72tv0oKP4x8n2sbPuXGPxgobzl5r1rK7wcnfrKTbyi4/rNkH84+TrMDz+9PTxhovweH33wMHtVV3uY2n50NHtTlfsRU/va3HykZP86uud0DF+AAAC1ElEQVRIie2Wa5OqMAyGSWlDubS03ESQi6D4///haQvuWV0dPefLzs5sx8EAeZK0vCl4PvH+YxDf+yaQOJqY/zfDrCChO4uTFlsy8/dBgikA8zw6VINUPb4NJgpWUE9aVulbKR2Ivb+Bg/gn0MPYgYEehZLZ+6WaXA70Ekzi+C3uDsQA7c8eAuQBJ8+D3IBYladzecqqqjyXYxEVu+crfANSkU+yTrXS52W5zKoY8jdBPdWyXwYRqU5qf0DgT3V0l3FkTV9PkR7rSJ0Uk+GrOaIQ1BzrmS7K67JcdMdyX8RR8Ar0KLVnSDxOCUekHAPCvefcN/bjL/gCpOxVR2GYPABpdPnUDDzZfGj4IQPMGkG/gMRfN56Nq2FI1nCQXp3DBqDCL2AAMH2Imh0AWqdFE+4KJhpgT+7BsPXzdnf1oQsoFyXUUMZbFWTXz21MbsF4AjuKlUT/eD5mxg5mY5zcvsd759GsPXoF8QzrcJfx5OyOY+UMt/HZ6u2o+WeQ5zCYi3qbmLZOh4aFkzOULZaZuwCySYMbsD+UNhq0mHAvdCcRtNwcrBETGjBYjD3JL6B24G6nOuo7/+FQVy5LCcdApE/A3IELePb9Ex3s2+Qg5KAaW57UZq4JFA6MbkA8NhbM5cGXtWgWtxD1oLt1PUo2lazJLViu8vq7qos2EXMWNV0KbHT+EWO1MypWKrWwDFKQm6CvYBBlwoI8Mblypp3/JQylM5QLRBwY3ionUXQFQyOEPR/tqkRHgscCBHSzMnNW6fgAjCXbwIN9xNgan86onJ7NAo94MY+nb+YHIJ9WMJhtZQnZGx8rESOdyAhnZxTRhw9Kxay8Zpyseu7BWCjo6QOQpz0bbHU8lMK0jgGjzyAVE+R0NKHvM/Yt76eTPJnvgUzbSJ1XWNkSLyUdGj5f9oSfMfPv+hHthwCGNgYGa/Nt7WMMe5/bUyR43aB+6L76C/5k8A8fzS/J4UmyBAAAAABJRU5ErkJggg=="
+				image: image.name
 			},
 		},
 		eventCategories: eventCategories.map((category) => category.value),
 	  };
+
+	const handleFileChange = (e) => {
+		const file = e.target.files[0]
+		console.log("File name:", file.name)
+		setImage(file);
+	}
 
 
 	const handleSubmit = async(e) => {
@@ -118,7 +125,13 @@ const AddEvent = ({ onSuccess }) => {
 
 				<div className="event-form-group">
 				<label htmlFor="eventFlyer">Upload Event Flyer/Image</label>
-				<input type="file" accept="image/*" id="eventFlyer" className="event-form-input-file" />
+				<input 
+					type="file" 
+					accept="image/*" 
+					id="eventFlyer" 
+					className="event-form-input-file"
+					onChange={handleFileChange}
+				/>
 				<div className="event-form-info">
 					<MdInfo />
 					<p>This image is what users will see when they view your event. Make it count.</p>

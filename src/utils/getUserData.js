@@ -1,8 +1,8 @@
 export const getUserData = () => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-        console.log("User data from local storage:", userData)
-        return(JSON.parse(userData));
+    const user = localStorage.getItem("user");
+    if (user) {
+        console.log("User data from local storage:", user)
+        return(JSON.parse(user));
     } else {
         console.log("User not found in local storage");
         return({});

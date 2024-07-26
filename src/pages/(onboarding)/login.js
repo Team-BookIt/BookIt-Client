@@ -13,6 +13,8 @@ import sideImage from "../../assets/onboarding-1.png";
 const Login = ({ onSuccess }) => {
     const navigate = useNavigate();
     const [userType, setUserType] = useState("attendee");
+    const [toastType, setToastType] = useState("");
+    const [toastMessage, setToastMessage] = useState("");
     const backendRoute = `https://book-it-server-sigma.vercel.app/auth/${userType === "attendee" ? "user" : "org"}/login`;
 
     const [formValues, setFormValues] = useState({
@@ -42,28 +44,69 @@ const Login = ({ onSuccess }) => {
     const handleLoginPress = async (event) => {
         event.preventDefault();
     
-        try {
-            const response = await axios.post(backendRoute, formValues);
-            console.log("Response:", response.data)
-            if (userType === "attendee") {
-                console.log("User logged in successfully!", response.data.user);
-                localStorage.setItem("user", response.data.user);
-                handleShowToast();
-                setTimeout(() => {
-                    navigate("/mainPage");
-                }, 2000);
-            } else {
-                console.log("Organizer logged in successfully!", response.data.organizer);
-                localStorage.setItem("organizer", response.data.organizer);
-                handleShowToast();
-                setTimeout(() => {
-                    navigate("/dashboard");
-                }, 2000);
-            }
-        } catch (error) {
-            console.log("Error logging in:", error);
-        }
+        axios.post(backendRoute, formValues)
+            .then(response => {
+                console.log("Response", response);
+                if (response.data) {
+                    if (userType === "attendee" && response.data.user) {
+                        console.log("User logged in successfully!", response.data.user);
+                        localStorage.setItem("user", JSON.stringify(response.data.user));
+                        setToastType("success");
+                        setToastMessage("Logged in successfully!");
+                        handleShowToast();
+                        setTimeout(() => {
+                            navigate("/mainPage");
+                        }, 2000);
+                    } else if (response.data.organizer) {
+                        console.log("Organizer logged in successfully!", response.data.organizer);
+                        localStorage.setItem("organizer", JSON.stringify(response.data.organizer));
+                        setToastType("success");
+                        setToastMessage("Logged in successfully!");
+                        handleShowToast();
+                        setTimeout(() => {
+                            navigate("/dashboard");
+                        }, 2000);
+                    } else {
+                        // Handle non-existing email (empty response data)
+                        setToastType("error");
+                        setToastMessage("Email not found");
+                        handleShowToast();
+                        console.log("Email not found. Please check and try again.");
+                    }
+                } else {
+                    // Handle non-existing email (empty response data)
+                    setToastType("error");
+                    setToastMessage("Email not found");
+                    handleShowToast();
+                    console.log("Email not found. Please check and try again.");
+                }
+            })
+            .catch(error => {
+                if (error.response) {
+                    setToastType("error");
+                    if (error.response.status === 401) {
+                        // Handle incorrect password
+                        setToastMessage("Incorrect password. Please try again.");
+                        handleShowToast();
+                        console.log("Incorrect password. Please try again.");
+                    } else {
+                        // Handle other errors
+                        setToastMessage(`${error.response.data.message}`);
+                        handleShowToast();
+                        console.log("Error logging in:", error.response.data.message);
+                    }
+                } else {
+                    // Handle network errors or other unexpected errors
+                    setToastMessage(`${error.message}`);
+                    handleShowToast();
+                    console.log("An unexpected error occurred:", error.message);
+                }
+            });
     }
+    
+    
+
+    
 
     const handleSignupPress = () => {
         navigate("/signup");
@@ -119,8 +162,8 @@ const Login = ({ onSuccess }) => {
 
             {showToast && (
                 <ToastMessage
-                    message="Logged in successfully!"
-                    type="success"
+                    message={toastMessage}
+                    type={toastType}
                     onClose={handleCloseToast}
                 />
             )}

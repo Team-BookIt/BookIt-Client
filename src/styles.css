@@ -531,9 +531,13 @@ section :nth-child(even) .section-text-container {
 .event-container .event-header {
     display: flex;
     justify-content: space-between;
-    background: url("./assets/hero-bg.jpg");
-    padding: 20px;
+    background-size: cover;
     height: 120px;
+}
+
+.event-container .event-header img {
+    width: 100%;
+    background-size: cover;
 }
 
 .event-container .event-info-container {
@@ -587,7 +591,7 @@ section :nth-child(even) .section-text-container {
 }
 
 .event-detail {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     margin-right: 15px;
     padding: 5px 10px;
@@ -702,7 +706,6 @@ section :nth-child(even) .section-text-container {
     flex-direction: row;
     align-items: flex-start;
     width: 550px;
-    /* height: 200px; */
     padding: 0;
     border-radius: 10px;
     overflow: hidden;
@@ -713,11 +716,13 @@ section :nth-child(even) .section-text-container {
 
 .booked-event-container .image-container {
     height: 200px;
+    
 }
 
 .booked-event-container .image-container img {
     background-size: cover;
     height: 100%;
+    width: 200px;
 }
 
 .booked-event-details-container {
@@ -964,6 +969,7 @@ section :nth-child(even) .section-text-container {
     align-items: center;
     justify-content: space-between;
     padding-right: 100px;
+    margin-bottom: 20px;
 }
 
 .review-button {
@@ -984,16 +990,54 @@ section :nth-child(even) .section-text-container {
 }
 
 /* attendee review */
-.attendee-review-container {
-    padding-right: 100px;
-}  
-
-.attendee-review-container-header {
+.review {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-right: 100px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
 }
+
+.review-header {
+    display: flex;
+    align-items: center;
+}
+
+.review-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.review-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-rating {
+    color: #f39c12;
+}
+
+.review-author {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.review-content {
+    margin-left: 70px;
+}
+
+.star-filled {
+    color: #f39c12; 
+    margin-right: 2px;
+}
+
+.star-empty {
+    color: #ccc; 
+    margin-right: 2px;
+}
+
 
 .profile-pic-and-name {
     display: flex;

@@ -9,6 +9,7 @@ import PastEvent from "../../components/(organizer)/pastEvent";
 import AddEvent from "../../components/(organizer)/addEvent";
 import { getOrganizerProfile } from "../../utils/getOrganizerProfile";
 import EventWaitlist from "../../components/(organizer)/eventWaitlist";
+import { getOrganizerData } from "../../utils/getOrganizerData";
 
 const Dashboard = () => {
     const [filter, setFilter] = useState("upcoming");
@@ -18,6 +19,7 @@ const Dashboard = () => {
     const [upcomingEvents, setUpcomingEvents] = useState([]);
     const [eventDetails, setEventDetails] = useState({});
     const [showWaitlist, setShowWaitlist] = useState(false);
+    const [orgID, setOrgID] = useState();
 
     const handleAddEventClick = () => setShowForm(true);
     const handleCloseForm = () => {
@@ -35,9 +37,17 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
+        const orgData = getOrganizerData();
+        setOrgID(Number(orgData.id));
+    }, []);
+
+    useEffect(() => {
         const getOrganizerEvents = async () => {
+            console.log("Organizer ID:", orgID)
             try {
-                const organizerProfile = await getOrganizerProfile(5);
+                const organizerProfile = await getOrganizerProfile(orgID);
+                console.log("Organizer Profile in Dashboard component:", organizerProfile)
+                console.log("Organizer id in Dashboard component:", orgID)
                 if (organizerProfile.organizerEventDetails) {
                     setOrganizerEvents(organizerProfile.organizerEventDetails);
                     console.log("Organizer events:", organizerProfile.organizerEventDetails);
@@ -48,7 +58,7 @@ const Dashboard = () => {
         };
 
         getOrganizerEvents();
-    }, []);
+    }, [orgID]);
 
     useEffect(() => {
         const now = Date.now();
@@ -133,7 +143,7 @@ const Dashboard = () => {
                 {showForm && (
                     <div className="modal-overlay" onClick={handleCloseForm}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <AddEvent onSuccess={handleCloseForm} />
+                            <AddEvent orgID={orgID} onSuccess={handleCloseForm} />
                         </div>
                     </div>
                 )}

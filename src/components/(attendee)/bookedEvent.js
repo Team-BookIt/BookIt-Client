@@ -1,9 +1,11 @@
 import React from "react";
 import { MdLocationOn, MdAlarm } from "react-icons/md";
+import { formatTimestamp } from "../../utils/formatTimestamp";
 
-import image from "../../assets/image-1.png"
+// import image from "../../assets/image-1.png"
 
-const BookedEvent = ({name, venue, daysLeft}) => {
+const BookedEvent = ({name, venue, timestamp, image}) => {
+    const {daysLeft} = formatTimestamp(timestamp)
     return (
         <div className="booked-event-container">
             <div className="image-container">
@@ -21,7 +23,7 @@ const BookedEvent = ({name, venue, daysLeft}) => {
                     
                     <div className="event-detail">
                         <MdAlarm />
-                        <p>{daysLeft} days left</p>
+                        <p>{daysLeft !== "Past" ? `${daysLeft} days left`: "Event ended"}</p>
                     </div>
                 </div>
             </div>

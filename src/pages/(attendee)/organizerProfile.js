@@ -17,7 +17,7 @@ const OrganizerProfile = () => {
     const [organizerEvents, setOrganizerEvents] = useState([]);
     const [pastEvents, setPastEvents] = useState([]);
     const [upcomingEvents, setUpcomingEvents] = useState([]);
-    const { organizer, organizer_logo, id } = location.state || {};
+    const { organizer, organizer_logo, orgID } = location.state || {};
 
     const handleAllClick = () => setFilter("all");
     const handlePastClick = () => setFilter("past");
@@ -25,7 +25,8 @@ const OrganizerProfile = () => {
 
     useEffect(() => {
         const getOrganizerEvents = async () => {
-            const organizerProfile = await getOrganizerProfile(id);
+            const organizerProfile = await getOrganizerProfile(orgID);
+            console.log("Organizer ID:", orgID)
             setOrganizerEvents(organizerProfile.organizerEventDetails);
             console.log("Organizer events:", organizerProfile.organizerEventDetails);
         };
@@ -45,7 +46,7 @@ const OrganizerProfile = () => {
         getOrganizerEvents();
         setPastEvents(past);
         setUpcomingEvents(upcoming);
-    }, [organizerEvents, id])
+    }, [organizerEvents, orgID])
     return(
         <div className="parent-container">
             <Header title={`${organizer} - Profile`} />
