@@ -27,6 +27,44 @@
     background-color: #FFC107;
 }
 
+.three-dots {
+    display: inline-block;
+}
+  
+.three-dots span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 2px;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: blink 1.4s infinite both;
+}
+  
+.three-dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+  
+.three-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+  
+.three-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+  
+@keyframes blink {
+    0%,
+    80%,
+    100% {
+      transform: scale(0);
+    }
+    40% {
+      transform: scale(1);
+    }
+}
+  
+
 
 /* Header */
 header {
@@ -426,6 +464,13 @@ section :nth-child(even) .section-text-container {
 
 .button-container button:hover {
     cursor: pointer;
+}
+
+.terms {
+    text-align: center;
+    width: 70%;
+    padding-top: 50px;
+    margin-bottom: -30px;
 }
 
 .verification-text-container {
