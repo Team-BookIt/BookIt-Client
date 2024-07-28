@@ -4,6 +4,7 @@ import axios from "axios";
 
 import PrimaryButton from "../../components/primaryButton";
 import ToastMessage from "../../components/(universal)/toast";
+import Loading from "../../components/(universal)/loading";
 
 import logo from "../../assets/logo.png";
 import sideImage from "../../assets/onboarding-1.png";
@@ -12,6 +13,7 @@ import sideImage from "../../assets/onboarding-1.png";
 
 const Login = ({ onSuccess }) => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [userType, setUserType] = useState("attendee");
     const [toastType, setToastType] = useState("");
     const [toastMessage, setToastMessage] = useState("");
@@ -43,6 +45,7 @@ const Login = ({ onSuccess }) => {
     
     const handleLoginPress = async (event) => {
         event.preventDefault();
+        setLoading(true);
     
         axios.post(backendRoute, formValues)
             .then(response => {
@@ -98,10 +101,14 @@ const Login = ({ onSuccess }) => {
                 } else {
                     // Handle network errors or other unexpected errors
                     setToastMessage(`${error.message}`);
+                    setToastType("error");
                     handleShowToast();
                     console.log("An unexpected error occurred:", error.message);
                 }
-            });
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     }
     
     
@@ -157,7 +164,7 @@ const Login = ({ onSuccess }) => {
                         required
                     />
                 </div>                
-                <PrimaryButton title={"Login"} onButtonClick={handleLoginPress}/>
+                <PrimaryButton title={loading ? <Loading /> : "Login"} onButtonClick={handleLoginPress}/>
             </div>
 
             {showToast && (

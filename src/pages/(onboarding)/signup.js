@@ -4,6 +4,7 @@ import axios from "axios";
 
 import PrimaryButton from "../../components/primaryButton";
 import ToastMessage from "../../components/(universal)/toast";
+import Loading from "../../components/(universal)/loading";
 
 import logo from "../../assets/logo.png";
 import sideImage from "../../assets/onboarding-2.png";
@@ -14,6 +15,8 @@ const Signup = ({ onSuccess }) => {
 
     // to keep track of which type of user is signing up: attendee or organizer
     const [userType, setUserType] = useState("attendee");
+
+    const [loading, setLoading] = useState(false);
 
     // to keep the content of the attendee signup form
     const [attendeeDetails, setAttendeeDetails] = useState({
@@ -62,6 +65,7 @@ const Signup = ({ onSuccess }) => {
 
     const handleAttendeeSignup = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         // check if both passwords match
         if (attendeeDetails.password === passwordConfirm) {
@@ -81,6 +85,8 @@ const Signup = ({ onSuccess }) => {
                 }
             } catch (error) {
                 console.log("Error signing attendee up:", error);
+            } finally {
+                setLoading(false);
             }
         } else {
             alert("Password mismatch!");
@@ -89,6 +95,7 @@ const Signup = ({ onSuccess }) => {
 
     const handleOrganizerSignup = async (event) => {
         event.preventDefault();
+        setLoading(true)        ;
 
         if (organizerDetails.password === passwordConfirm) {
             try {
@@ -97,7 +104,7 @@ const Signup = ({ onSuccess }) => {
 
                 if (response.data.message === "Organizer registered successfully") {
                     console.log("Organizer info:", response.data.organizer[0]);
-                    localStorage.setItem("organizer", JSON.stringify(response.data.user));
+                    localStorage.setItem("organizer", JSON.stringify(response.data.organizer[0]));
                     handleShowToast();
                     setTimeout(() => {
                         navigate("/dashboard");
@@ -107,6 +114,8 @@ const Signup = ({ onSuccess }) => {
                 }
             } catch (error) {
                 console.log("Error signing organizer up:", error);
+            } finally {
+                setLoading(false);
             }
         } else {
             alert("Password mismatch!");
@@ -233,7 +242,12 @@ const Signup = ({ onSuccess }) => {
                         </div>
                     )}
 
-                    <PrimaryButton title={"Signup"} />
+                    <p className="terms">
+                        Your personal information will not be shared with third-party entities.
+                        By signing up, you agree to our <a href="/signup">terms of service</a> and <a href="/signup">privacy policy</a>
+                    </p>
+
+                    <PrimaryButton title={loading ? <Loading /> : "Signup"} />
                 </form>
             </div>
 
