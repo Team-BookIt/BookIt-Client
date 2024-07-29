@@ -15,6 +15,8 @@ import SideBar from "../../components/(attendee)/sideBar";
 import PrimaryButton from "../../components/primaryButton";
 import AttendeeReview from "../../components/(attendee)/attendeeReview";
 import ReviewModal from "../../components/(attendee)/reviewModal";
+import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
+import ToastMessage from "../../components/(universal)/toast";
 import { bookEvent } from "../../utils/bookEvent";
 
 const EventPage = () => {
@@ -22,6 +24,11 @@ const EventPage = () => {
     const location = useLocation();
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [showTaost, setShowToast] = useState(false);
+    const [toastType, setToastType] = useState("");
+    const [toastMessage, setToastMessage] = useState("");
+
     const {
         name,
         date,
@@ -36,19 +43,38 @@ const EventPage = () => {
         id
     } = location.state || {};
 
-    const openModal = () => {
+    const openReviewModal = () => {
         setIsReviewModalOpen(true);
     };
 
-    const closeModal = () => {
+    const closeReveiwModal = () => {
         setIsReviewModalOpen(false);
     };
 
-    const handleBookEvent = () => {
-        bookEvent(id);
-        alert("Event booked successfully");
-        navigate("/mainPage");
+    const handleBookEventPress = () => {
+        setShowConfirmationModal(true);
     };
+
+    const onYesPress = async() => {
+        const booking = await bookEvent(id);
+        if (booking.message === "Event registration successful") {
+            setToastMessage("Event booked successfully!");
+            setToastType("success");
+        } else if (booking.message === "Seems you've already booked this event") {
+            setToastMessage("Seems you've already booked this event");
+            setToastType("warning");
+        } else {
+            setToastMessage("Failed to book event");
+            setToastType("error");
+        }
+
+        setShowToast(true);
+        setShowConfirmationModal(false);
+    }
+
+    const onNoPress = () => {
+        setShowConfirmationModal(false);
+    }
 
     const handleViewOrganizerProfile = () => {
         navigate("/organizerProfile", {
@@ -153,13 +179,13 @@ const EventPage = () => {
                     )}
                     {!isEnded ? (
                         <div>
-                            <PrimaryButton title={"Book It"} onButtonClick={handleBookEvent} />
+                            <PrimaryButton title={"Book It"} onButtonClick={handleBookEventPress} />
                         </div>
                     ) : (                        
                         <div>
                             <div className="reviews-header">
                                 <p className="custom-underline">Reviews</p>
-                                <div className="review-button" onClick={openModal}>
+                                <div className="review-button" onClick={openReviewModal}>
                                     <MdChat />
                                     <p>Leave a review</p>
                                 </div>
@@ -183,7 +209,24 @@ const EventPage = () => {
                     )}
                 </div>
             </div>
-            <ReviewModal isOpen={isReviewModalOpen} onRequestClose={closeModal} />
+            <ReviewModal isOpen={isReviewModalOpen} onRequestClose={closeReveiwModal} />
+
+            {showConfirmationModal && (
+                <ConfirmationModal 
+                    onYesPress={onYesPress} 
+                    onNoPress={onNoPress} 
+                    message="Are you sure you want to book this event?" 
+                />
+            )}
+
+            {showTaost && (
+                <ToastMessage 
+                    message={toastMessage}
+                    type={toastType}
+                    duration={2000}
+                    onClose={() => setShowToast(false)}
+                />
+            )}
         </div>
     );
 };
