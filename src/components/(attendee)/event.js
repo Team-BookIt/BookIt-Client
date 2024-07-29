@@ -3,6 +3,7 @@ import React from "react";
 import { MdAccessTime, MdLocationOn, MdCalendarMonth } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { formatTimestamp } from "../../utils/formatTimestamp";
+import defaultImg from "../../assets/hero-bg.jpg"
 
 const Event = ({
     name, 
@@ -43,7 +44,7 @@ const Event = ({
     return (
         <div className="event-container">
             <div className="event-header">
-                <img src={image} alt="event flyer" />
+                <img src={image !== "" ? image : defaultImg} alt="event flyer" />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
