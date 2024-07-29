@@ -46,11 +46,8 @@ const Dashboard = () => {
             console.log("Organizer ID:", orgID)
             try {
                 const organizerProfile = await getOrganizerProfile(orgID);
-                console.log("Organizer Profile in Dashboard component:", organizerProfile)
-                console.log("Organizer id in Dashboard component:", orgID)
                 if (organizerProfile.organizerEventDetails) {
                     setOrganizerEvents(organizerProfile.organizerEventDetails);
-                    console.log("Organizer events:", organizerProfile.organizerEventDetails);
                 }
             } catch (error) {
                 console.error("Error fetching organizer events:", error);
