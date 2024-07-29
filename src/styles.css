@@ -563,6 +563,9 @@ section :nth-child(even) .section-text-container {
 
 /* event */
 .event-container {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
     border-radius: 15px;
     overflow: hidden;
     width: 400px;
@@ -574,10 +577,10 @@ section :nth-child(even) .section-text-container {
 }
 
 .event-container .event-header {
-    display: flex;
-    justify-content: space-between;
     background-size: cover;
-    height: 120px;
+    height: 150px;
+    overflow: hidden;
+    align-items: center;
 }
 
 .event-container .event-header img {
@@ -630,8 +633,9 @@ section :nth-child(even) .section-text-container {
 }
 
 .event-details {
-    display: flex;
-    flex-wrap: wrap;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
     margin-top: 10px;
 }
 
@@ -737,15 +741,26 @@ section :nth-child(even) .section-text-container {
 
 
 /* home */
+.home-section {
+    margin-top: 40px;
+}
 .events-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+/* bookings */
+.booked-events-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 50px;
+    margin-top: 50px;  
 }
-
-/* bookings */
 .booked-event-container {
     display: flex;
     flex-direction: row;
