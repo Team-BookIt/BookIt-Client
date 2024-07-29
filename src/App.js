@@ -7,11 +7,12 @@ import Login from './pages/(onboarding)/login';
 import Signup from './pages/(onboarding)/signup';
 import OrganizerProfileForm from './pages/(onboarding)/organizerProfileFrom';
 import AccountVerification from './pages/(onboarding)/accountVerification';
-import Main from './pages/(attendee)/index';
+import Home from './pages/(attendee)/home';
+import Bookings from './pages/(attendee)/bookings';
+import AttendeeSettings from './pages/(attendee)/settings';
 import EventPage from './pages/(attendee)/eventPage';
 import OrganizerProfile from './pages/(attendee)/organizerProfile';
 import Dashboard from './pages/(organizer)/dashboard';
-import AttendeeSettings from './pages/(attendee)/settings';
 import OrganizerSettings from './pages/(organizer)/settings';
 
 function App() {
@@ -23,7 +24,9 @@ function App() {
         <Route path="/signup" element={<Signup/>} />
         <Route path="/organizerProfileForm" element={<OrganizerProfileForm/>} />
         <Route path="/accountVerification" element={<AccountVerification/>} />
-        <Route path="/mainPage" element={<Main />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/bookings" element={<Bookings />} />
+        <Route path="/attendeeSettings" element={<AttendeeSettings />} />
         <Route path="/eventPage" element={<EventPage />} />
         <Route path="/organizerProfile" element={<OrganizerProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />

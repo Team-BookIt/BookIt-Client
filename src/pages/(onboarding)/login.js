@@ -58,7 +58,7 @@ const Login = ({ onSuccess }) => {
                         setToastMessage("Logged in successfully!");
                         handleShowToast();
                         setTimeout(() => {
-                            navigate("/mainPage");
+                            navigate("/home");
                         }, 2000);
                     } else if (response.data.organizer) {
                         console.log("Organizer logged in successfully!", response.data.organizer);

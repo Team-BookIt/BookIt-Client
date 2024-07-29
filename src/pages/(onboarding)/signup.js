@@ -78,7 +78,7 @@ const Signup = ({ onSuccess }) => {
                     localStorage.setItem("user", JSON.stringify(response.data.user));
                     handleShowToast();
                     setTimeout(() => {
-                        navigate("/mainPage");
+                        navigate("/home");
                     }, 2000);
                 } else {
                     alert(`${response.data.message}`);
