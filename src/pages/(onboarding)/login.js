@@ -11,7 +11,7 @@ import sideImage from "../../assets/onboarding-1.png";
 
 
 
-const Login = ({ onSuccess }) => {
+const Login = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [userType, setUserType] = useState("attendee");
@@ -31,7 +31,7 @@ const Login = ({ onSuccess }) => {
     };
 
     const handleCloseToast = () => {
-        onSuccess();
+        // onSuccess();
         setShowToast(false);
     };
 
