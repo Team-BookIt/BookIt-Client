@@ -17,7 +17,7 @@ import AttendeeReview from "../../components/(attendee)/attendeeReview";
 import ReviewModal from "../../components/(attendee)/reviewModal";
 import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 import ToastMessage from "../../components/(universal)/toast";
-import { bookEvent } from "../../utils/bookEvent";
+import { addUserInterests, bookEvent } from "../../utils/bookEvent";
 
 const EventPage = () => {
     const navigate = useNavigate();
@@ -57,6 +57,7 @@ const EventPage = () => {
 
     const onYesPress = async() => {
         const booking = await bookEvent(id);
+        await addUserInterests(categories);
         if (booking.message === "Event registration successful") {
             setToastMessage("Event booked successfully!");
             setToastType("success");
