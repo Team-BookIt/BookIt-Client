@@ -11,6 +11,7 @@ const Home = () => {
     const [events, setEvents] = useState([]);
     const [pastEvents, setPastEvents] = useState([]);
     const [upcomingEvents, setUpcomingEvents] = useState([])
+    const [interestedEvents, setInterestedEvents] = useState([]);
 
     useEffect(() => {
         const fetchEventsData = async () => {
@@ -18,22 +19,23 @@ const Home = () => {
                 const localEvents = localStorage.getItem("allEvents");
                 const parsedLocalEvents = localEvents ? JSON.parse(localEvents) : [];
                 const eventsData = await fetchEvents();
+                console.log("All events:", eventsData);
 
                 if (JSON.stringify(eventsData) !== JSON.stringify(parsedLocalEvents)) {
                     setEvents(eventsData);
                     localStorage.setItem("allEvents", JSON.stringify(eventsData));
-                    console.log("Events fetched and updated successfully:", eventsData);
                 } else {
                     setEvents(parsedLocalEvents);
-                    console.log("Events are up-to-date. Using local storage data.", parsedLocalEvents);
                 }
             } catch (error) {
                 console.log("Error fetching events:", error);
-                alert("Oops! Couldn't fetch events.");
             }
         };
-
-        setUser(getUserData()); // Fetch the user data on mount
+        const getUser = async() => {
+            setUser(await getUserData()); // Fetch the user data on mount
+        }
+        
+        getUser();
         fetchEventsData();
     }, []);
 
@@ -50,9 +52,16 @@ const Home = () => {
             return date.getTime() < now;
         });
 
+        const interested = upcomingEvents.filter((event) => {
+            const tags = event.event_tags || [];
+            const interests = user.interests || [];
+            return (tags.some(tag => interests.includes(tag)));
+        })
+
+        setInterestedEvents(interested)
         setUpcomingEvents(upcoming);
         setPastEvents(past);
-    }, [events]);
+    }, [events, upcomingEvents, user.interests]);
 
     return (
         <div className="parent-container">
@@ -65,7 +74,7 @@ const Home = () => {
                 <div className="home-section">
                     <p className="custom-underline">Events you might like</p>
                     <div className="events-container">
-                        {events && events.map(event => (
+                        {interestedEvents && interestedEvents.map(event => (
                             <Event
                                 key={event.event_id}
                                 id={event.event_id}
@@ -87,51 +96,6 @@ const Home = () => {
 
                 <div className="home-section">
                     <p className="custom-underline">Upcoming Events</p>
-                    <div className="events-container">
-                        {upcomingEvents.map(event => (
-                            <Event
-                                key={event.event_id}
-                                id={event.event_id}
-                                name={event.title}
-                                rate={event.price}
-                                timestamp={event.event_timestamp}
-                                venue={event.venue}
-                                description={event.bio}
-                                organizer={event.organizer_name}
-                                organizer_logo={event.organizer_logo}
-                                categories={event.event_tags}
-                                image={event.image}
-                                orgID={event.org_id}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-                <div className="home-section">
-                    <p className="custom-underline">Trending Events</p>
-                    <div className="events-container">
-                        {upcomingEvents.map(event => (
-                            <Event
-                                key={event.event_id}
-                                id={event.event_id}
-                                name={event.title}
-                                rate={event.price}
-                                timestamp={event.event_timestamp}
-                                venue={event.venue}
-                                description={event.bio}
-                                organizer={event.organizer_name}
-                                organizer_logo={event.organizer_logo}
-                                categories={event.event_tags}
-                                image={event.image}
-                                orgID={event.org_id}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-
-                <div className="home-section">
-                    <p className="custom-underline">Top Organizers</p>
                     <div className="events-container">
                         {upcomingEvents.map(event => (
                             <Event
