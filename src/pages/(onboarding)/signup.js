@@ -9,7 +9,7 @@ import Loading from "../../components/(universal)/loading";
 import logo from "../../assets/logo.png";
 import sideImage from "../../assets/onboarding-2.png";
 
-const Signup = ({ onSuccess }) => {
+const Signup = () => {
     const navigate = useNavigate();
     const backendRoute = process.env.REACT_APP_BOOKIT_BACKEND_URL;
 
@@ -37,13 +37,15 @@ const Signup = ({ onSuccess }) => {
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
     const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastType, setToatsType] = useState("");
 
     const handleShowToast = () => {
         setShowToast(true);
     };
 
     const handleCloseToast = () => {
-        onSuccess();
+        // onSuccess();
         setShowToast(false);
     };
 
@@ -105,12 +107,16 @@ const Signup = ({ onSuccess }) => {
                 if (response.data.message === "Organizer registered successfully") {
                     console.log("Organizer info:", response.data.organizer[0]);
                     localStorage.setItem("organizer", JSON.stringify(response.data.organizer[0]));
+                    setToastMessage("Signed up successfully!");
+                    setToatsType("success")
                     handleShowToast();
                     setTimeout(() => {
                         navigate("/dashboard");
                     }, 2000);
                 } else {
-                    alert(`${response.data.message}`);
+                    handleShowToast();
+                    setToastMessage(response.data.message);
+                    setToatsType("warning")
                 }
             } catch (error) {
                 console.log("Error signing organizer up:", error);
@@ -253,9 +259,10 @@ const Signup = ({ onSuccess }) => {
 
             {showToast && (
                 <ToastMessage
-                    message="Signed up successfully!"
-                    type="success"
+                    message={toastMessage}
+                    type={toastType}
                     onClose={handleCloseToast}
+                    duration={3000}
                 />
             )}
         </div>
