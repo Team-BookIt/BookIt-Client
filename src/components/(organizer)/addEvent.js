@@ -5,26 +5,30 @@ import axios from 'axios';
 import Select from "react-select";
 import 'react-datepicker/dist/react-datepicker.css';
 import ToastMessage from '../(universal)/toast';
+import { useForm } from 'react-hook-form';
+import Loading from '../(universal)/loading';
+import Resizer from 'react-image-file-resizer';
 
-
-const AddEvent = ({ orgID, onSuccess }) => {
+const AddEvent = ({ organizerID, onSuccess }) => {
 	const backendURL = "https://book-it-server-sigma.vercel.app";
+
+	const { register, handleSubmit } = useForm();
 
 	const [date, setDate] = useState(new Date());
 	const [eventTitle, setEventTitle] = useState('');
 	const [eventDescription, setEventDescription] = useState('');
-	const [image, setImage] = useState('');
 	const [eventVenue, setEventVenue] = useState('');
 	const [eventCategories, setEventCategories] = useState([]);
 	const [customCategory, setCustomCategory] = useState("");
 	const [showToast, setShowToast] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleShowToast = () => {
 		setShowToast(true);
 	};
 	
 	const handleCloseToast = () => {
-		onSuccess()
+		onSuccess();
 		setShowToast(false);
 	};
 
@@ -57,38 +61,59 @@ const AddEvent = ({ orgID, onSuccess }) => {
 		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	};
 
-	const dataToPost = {
-		organizerID: orgID,
-		eventDetails: {
-			coreEventDetails: {
-				title: eventTitle,
-				venue: eventVenue,
-				bio: eventDescription,
-				event_timestamp: formatTimestamp(date),
-				price: 0.00
-			},
-		  	additionalEventDetails: {
-				image: image.name
-			},
-		},
-		eventCategories: eventCategories.map((category) => category.value),
-	  };
+	const resizeFile = (file) =>
+		new Promise((resolve) => {
+			Resizer.imageFileResizer(
+				file,
+				800, // max width
+				800, // max height
+				'JPEG', // format
+				70, // quality
+				0, // rotation
+				(uri) => {
+					resolve(uri);
+				},
+				'blob'
+			);
+		});
 
-	const handleFileChange = (e) => {
-		const file = e.target.files[0]
-		console.log("File name:", file.name)
-		setImage(file);
-	}
+	const handleAddEvent = async (data) => {
+		setLoading(true);
+		console.log("Org id from add event:", organizerID);
+		const formData = new FormData();
+		formData.append("organizerID", organizerID);
+		formData.append("eventDetails[coreEventDetails][title]", eventTitle);
+		formData.append("eventDetails[coreEventDetails][venue]", eventVenue);
+		formData.append("eventDetails[coreEventDetails][bio]", eventDescription);
+		formData.append("eventDetails[coreEventDetails][event_timestamp]", formatTimestamp(date));
+		formData.append("eventDetails[coreEventDetails][price]", 0.00);
+		
+		const resizedImage = await resizeFile(data.file[0]);
+		console.log("Resized image:", resizedImage);
+		formData.append("image", resizedImage);
 
+		let categories = [];
+		eventCategories.forEach((category, index) => {
+			categories[index] = category.value;
+		});
+		formData.append("eventCategories", categories);
 
-	const handleSubmit = async(e) => {
-		e.preventDefault();
+		for (let pair of formData.entries()) {
+			console.log(pair[0] + ': ' + pair[1]);
+		}
+
 		try {
-			const response = await axios.post(`${backendURL}/events/create`, dataToPost);
-			console.log("Event created:", response.data);
+			const response = await axios.post(`${backendURL}/events/create`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+			console.log("Event created:", response);
 			handleShowToast();
 		} catch (error) {
 			console.error("Error creating a new event:", error);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -97,7 +122,7 @@ const AddEvent = ({ orgID, onSuccess }) => {
 			<div className="event-form-header">
 				<p>Add Event</p>
 			</div>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit(handleAddEvent)}>
 				<div className="event-form-group">
 					<label htmlFor="eventTitle">Event Title *</label>
 					<input
@@ -112,30 +137,30 @@ const AddEvent = ({ orgID, onSuccess }) => {
 				</div>
 
 				<div className="event-form-group">
-				<label htmlFor="eventDescription">Event Description *</label>
-				<textarea
-					id="eventDescription"
-					className="event-form-textarea"
-					value={eventDescription}
-					onChange={(e) => setEventDescription(e.target.value)}
-					placeholder="Talk to us about the event..."
-					required
-				></textarea>
+					<label htmlFor="eventDescription">Event Description *</label>
+					<textarea
+						id="eventDescription"
+						className="event-form-textarea"
+						value={eventDescription}
+						onChange={(e) => setEventDescription(e.target.value)}
+						placeholder="Talk to us about the event..."
+						required
+					></textarea>
 				</div>
 
 				<div className="event-form-group">
-				<label htmlFor="eventFlyer">Upload Event Flyer/Image</label>
-				<input 
-					type="file" 
-					accept="image/*" 
-					id="eventFlyer" 
-					className="event-form-input-file"
-					onChange={handleFileChange}
-				/>
-				<div className="event-form-info">
-					<MdInfo />
-					<p>This image is what users will see when they view your event. Make it count.</p>
-				</div>
+					<label htmlFor="eventFlyer">Upload Event Flyer/Image</label>
+					<input 
+						type="file" 
+						accept="image/*" 
+						{...register("file")}
+						id="eventFlyer" 
+						className="event-form-input-file"
+					/>
+					<div className="event-form-info">
+						<MdInfo />
+						<p>This image is what users will see when they view your event. Make it count.</p>
+					</div>
 				</div>
 
 				<div className="event-form-group">
@@ -187,12 +212,12 @@ const AddEvent = ({ orgID, onSuccess }) => {
 					</button>
 				</div>
 
-				<button type="submit" className="event-form-submit-button">Publish Event</button>
+				<button type="submit" className="event-form-submit-button">{loading ? <Loading /> : "Publish Event"}</button>
 			</form>
 
 			{showToast && (
 				<ToastMessage
-					message="Event created sucessfully!"
+					message="Event created successfully!"
 					type="success"
 					onClose={handleCloseToast}
 				/>
