@@ -44,7 +44,7 @@ const Event = ({
     return (
         <div className="event-container">
             <div className="event-header">
-                <img src={image !== "" ? image : defaultImg} alt="event flyer" />
+                <img src={image && image !== "" && Object.keys(image).length !== "" ? image : defaultImg} alt="event flyer" />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
