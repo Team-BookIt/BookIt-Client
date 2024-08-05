@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import { MdUpload } from "react-icons/md";
-import EditFieldModal from "../../components/(attendee)/editAttendeeFieldModal"; 
+import React, { useEffect, useState } from "react";
+import { MdCheck, MdDeleteOutline, MdEdit, MdOutlineCameraAlt, MdOutlineLock, MdExitToApp, MdOutlineInfo } from "react-icons/md";
 import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import { useNavigate } from "react-router-dom";
 
+
+import defaultAvatar from "../../assets/default-avatar.png"
+import { getUserData } from "../../utils/getUserData";
+
 const AttendeeSettings = () => {
     const navigate = useNavigate();
-    const [showEditModal, setShowEditModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [currentField, setCurrentField] = useState("");
-    const [currentValue, setCurrentValue] = useState("");
-    const [inputType, setInputType] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [editable, setEditable] = useState(false);
+    const [user, setUser] = useState({});
 
-    const handleEditPress = (field, value, type) => {
-        setCurrentField(field);
-        setCurrentValue(value);
-        setInputType(type);
-        setShowEditModal(true);
-    };
+    useEffect(() => {
+        const fetchUser = async() => {
+            const userData = await getUserData();
+            setUser(userData);
+        }
 
-    const closeModal = () => {
-        setShowEditModal(false);
-    };
+        fetchUser();
+    }, [])
 
     const handleYesPress = () => {
         console.log("Yes pressed");
@@ -35,89 +35,155 @@ const AttendeeSettings = () => {
         setShowConfirmationModal(false);
     };
 
+    const handleFileChange = (event) => {
+        setSelectedFile(URL.createObjectURL(event.target.files[0]));
+    };
+
+    const handleDelete = () => {
+        setSelectedFile(null);
+    };
+
+    const handleEditPress = () => {
+        setEditable(!editable);
+    }
+      
     return (
         <div>
             <Header title={"Settings"} />
             <SideBar activePage={"Settings"} />
             <div className="page-container">
-                <h1>Your Account</h1>
 
                 <div className="settings-container">
-                    <div className="pic-upload">
-                        <div className="profile-image">
-                            K
-                        </div>
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Upload your profile photo
+                    {/* edits start */}
+                    <div className="settings-header">
+                        <div className="avatar-upload-container">
+                            <div className="avatar-wrapper">
+                                <img src={selectedFile || defaultAvatar} alt="Avatar" className="avatar-image" />
+                                {editable && (
+                                    <div>
+                                        <label htmlFor="file-input" className="camera-icon-wrapper">
+                                            <MdOutlineCameraAlt className="camera-icon" />
+                                        </label>
+                                        <input id="file-input" accept="image/*" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
+                                    </div>
+                                )}
                             </div>
-                            <div className="sub-text">
-                                This will help friends recognize you on BookIt!
-                            </div>
+
+                            {editable && selectedFile && (                                
+                                <div className="delete-button-container" onClick={handleDelete}>
+                                    <button className="delete-button">Delete avatar</button>
+                                    <MdDeleteOutline size={30} />
+                                </div>
+                            )}
                         </div>
-                        <div>
-                            <label className="edit-button">
-                                <input type="file" accept="image/*" />
-                                    Upload
-                                <MdUpload className="upload-icon" />
+
+                        <div onClick={handleEditPress}>
+                            {editable === false ? (
+                                <div className="edit-button">
+                                    <p>Edit Profile</p>
+                                    <MdEdit />
+                                </div>
+                            ) : (
+                                <div className="edit-button">
+                                    <p>Save Changes</p>
+                                    <MdCheck />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="pwd-group-heading">
+                        <p>Basic Info</p>
+                        <MdOutlineInfo />
+                    </div>
+
+                    <div className="name-group">
+                        <div className="input-group">
+                            <label>
+                                First Name
                             </label>
+                            <input 
+                                type="text"
+                                placeholder={user ? user.first_name : ""}
+                                value={user ? user.first_name : ""}
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>
+                                Last Name
+                            </label>
+                            <input 
+                                type="text"
+                                placeholder={user ? user.last_name : ""}
+                                value={user ? user.last_name : ""}
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>
+                                Email Address
+                            </label>
+                            <input 
+                                type="email"
+                                placeholder={user ? user.email : ""}
+                                value={user ? user.email : ""}
+                                readOnly={!editable}
+                                className="field-input"
+                            />
                         </div>
                     </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Name
-                            </div>
-                            <div className="sub-text">
-                                Kofi Asamoah
-                            </div>
-                        </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("name", "Kofi Asamoah", "text")}
-                            >
-                                Edit
-                            </button>
-                        </div>
+                    <div className="pwd-group-heading">
+                        <p>Change Password</p>
+                        <MdOutlineLock />
                     </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Email
-                            </div>
-                            <div className="sub-text">
-                                kasamoah@gmail.com
-                            </div>
+                    <div className="name-group">
+                        <div className="input-group">
+                            <label>
+                                Current Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
                         </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("email", "kasamoah@gmail.com", "email")}
-                            >
-                                Edit
-                            </button>
+                        <div className="input-group">
+                            <label>
+                                New Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>
+                                Confirm New Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
                         </div>
                     </div>
-
-                    <div className="password">
-                        <button className="edit-button" onClick={() => setShowConfirmationModal(true)}>
-                            Log out
-                        </button>
+                    
+                    <div 
+                        style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 
+                        className="edit-button"
+                    >
+                        <p>Log out</p>
+                        <MdExitToApp size={30} />
                     </div>
                 </div>
-
-                {/* Render EditFieldModal when showEditModal is true */}
-                {showEditModal && (
-                    <EditFieldModal
-                        field={currentField}
-                        value={currentValue}
-                        type={inputType}
-                        onClose={closeModal}
-                    />
-                )}
 
                     {showConfirmationModal && (
                         <ConfirmationModal 
