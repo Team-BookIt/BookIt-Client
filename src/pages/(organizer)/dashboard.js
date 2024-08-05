@@ -140,7 +140,7 @@ const Dashboard = () => {
                 {showForm && (
                     <div className="modal-overlay" onClick={handleCloseForm}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <AddEvent orgID={orgID} onSuccess={handleCloseForm} />
+                            <AddEvent organizerID={orgID} onSuccess={handleCloseForm} />
                         </div>
                     </div>
                 )}
