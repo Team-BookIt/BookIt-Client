@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdUpload } from "react-icons/md";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(organizer)/sideBar";
 import EditFieldModal from "../../components/(organizer)/editOrgFieldModal";
 import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 import { useNavigate } from "react-router-dom";
+import { getOrganizerData } from "../../utils/getOrganizerData";
 
 const OrganizerSettings = () => {
     const navigate = useNavigate();
+    const [organizerData, setOrganizerData] = useState({});
+
+    const name = organizerData.name || "Not set";
+    const email = organizerData.email || "Not set";
+    const contact = organizerData.contact || "Not set";
+    const location = organizerData.location || "Not set";
+    const website = organizerData.website || "Not set";
+    const bio = organizerData.bio || "Not set";
+
+    useEffect(() => {
+        const organizer = getOrganizerData();
+        setOrganizerData(organizer);
+    }, [])
 
     const [showEditModal, setShowEditModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -89,13 +103,13 @@ const OrganizerSettings = () => {
                                 Name
                             </div>
                             <div className="sub-text">
-                                Kofi Asamoah
+                                {organizerData && name}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("name", "text", "Kofi Asamoah")}
+                                onClick={() => handleEditPress("name", "text", name)}
                             >
                                 Edit
                             </button>
@@ -105,16 +119,16 @@ const OrganizerSettings = () => {
                     <div className="settings-field">
                         <div className="settings-field-text">
                             <div className="main-text">
-                                Email
+                                Email Address 
                             </div>
                             <div className="sub-text">
-                                kasamoah@gmail.com
+                            {organizerData && email}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("email", "email", "kasamoah@gmail.com")}
+                                onClick={() => handleEditPress("email", "email", email)}
                             >
                                 Edit
                             </button>
@@ -127,13 +141,13 @@ const OrganizerSettings = () => {
                                 Contact Info
                             </div>
                             <div className="sub-text">
-                                012345678
+                                {organizerData && contact}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("contact", "text", "012345678")}
+                                onClick={() => handleEditPress("contact", "text", contact)}
                             >
                                 Edit
                             </button>
@@ -146,13 +160,13 @@ const OrganizerSettings = () => {
                                 Location
                             </div>
                             <div className="sub-text">
-                                Kumasi
+                                {organizerData && location}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("location", "text", "Kumasi")}
+                                onClick={() => handleEditPress("location", "text", location)}
                             >
                                 Edit
                             </button>
@@ -162,16 +176,16 @@ const OrganizerSettings = () => {
                     <div className="settings-field">
                         <div className="settings-field-text">
                             <div className="main-text">
-                                Website URL
+                                Website Address
                             </div>
                             <div className="sub-text">
-                                www.acesknust.com
+                                {organizerData && website}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("website", "url", "www.acesknust.com")}
+                                onClick={() => handleEditPress("website", "url", website)}
                             >
                                 Edit
                             </button>
@@ -184,14 +198,13 @@ const OrganizerSettings = () => {
                                 Bio
                             </div>
                             <div className="sub-text">
-                                The Association of Computer Engineering Students of KNUST is
-                                a student Association aiming to...
+                                {organizerData && bio}
                             </div>
                         </div>
                         <div>
                             <button
                                 className="edit-button"
-                                onClick={() => handleEditPress("bio", "text", "The Association of Computer Engineering Students of KNUST is a student Association aiming to...")}
+                                onClick={() => handleEditPress("bio", "text", bio)}
                             >
                                 Edit
                             </button>
