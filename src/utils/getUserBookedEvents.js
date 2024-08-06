@@ -7,7 +7,7 @@ export const getUserBookedEvents = async () => {
     console.log("User id:", userId);
     try {
         const response = await axios.get(`${backendURL}/events/bookings/${userId}`);
-        console.log("Booked Events from util func:",response.data);
+        console.log("Booked Events from util func:",response.data.bookedEvents);
         return (response.data.bookedEvents);
     } catch (error) {
         console.log("Error getting booked events:", error);

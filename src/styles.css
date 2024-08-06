@@ -1604,3 +1604,26 @@ section :nth-child(even) .section-text-container {
     background-size: contain;
     background-repeat: no-repeat;
 }
+
+
+/* cancel booking button */
+.cancel-booking-button {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px auto 50px auto;
+    cursor: pointer;
+}
+
+.cancel-booking-button button {
+    width: 70%;
+    background-color: #da0000;
+    border: 0;
+    box-shadow: 0 2px 3px 0 #565656;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+}
