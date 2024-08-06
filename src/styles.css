@@ -1592,3 +1592,15 @@ section :nth-child(even) .section-text-container {
     font-size: 21px;
     font-weight: 600;
 }
+.no-events-img-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.no-events-img {
+    width: 500px;
+    height: 500px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
