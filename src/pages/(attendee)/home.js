@@ -5,13 +5,15 @@ import { fetchEvents } from "../../utils/fetchEvents";
 import { getUserData } from "../../utils/getUserData";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
+import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
 
 const Home = () => {
     const [user, setUser] = useState({});
     const [events, setEvents] = useState([]);
     const [pastEvents, setPastEvents] = useState([]);
-    const [upcomingEvents, setUpcomingEvents] = useState([])
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
     const [interestedEvents, setInterestedEvents] = useState([]);
+    const [bookedEvents, setBookedEvents] = useState([]);
 
     useEffect(() => {
         const fetchEventsData = async () => {
@@ -31,9 +33,10 @@ const Home = () => {
                 console.log("Error fetching events:", error);
             }
         };
+        
         const getUser = async() => {
             setUser(await getUserData()); // Fetch the user data on mount
-        }
+        };
         
         getUser();
         fetchEventsData();
@@ -43,12 +46,12 @@ const Home = () => {
         const now = Date.now();
 
         const upcoming = events.filter((event) => {
-            const date = new Date(event.event_timestamp)
+            const date = new Date(event.event_timestamp);
             return date.getTime() > now;
         });
 
         const past = events.filter((event) => {
-            const date = new Date(event.event_timestamp)
+            const date = new Date(event.event_timestamp);
             return date.getTime() < now;
         });
 
@@ -56,12 +59,30 @@ const Home = () => {
             const tags = event.event_tags || [];
             const interests = user.interests || [];
             return (tags.some(tag => interests.includes(tag)));
-        })
+        });
 
-        setInterestedEvents(interested)
+        setInterestedEvents(interested);
         setUpcomingEvents(upcoming);
         setPastEvents(past);
     }, [events, upcomingEvents, user.interests]);
+
+    useEffect(() => {
+        const getBookedEvents = async () => {
+            try {
+                const response = await getUserBookedEvents();
+                setBookedEvents(response);
+            } catch (error) {
+                console.error("Error fetching booked events:", error);
+                setBookedEvents([]);
+            }
+        };
+
+        getBookedEvents();
+    }, []);
+
+    const isBooked = (eventID) => {
+        return Array.isArray(bookedEvents) && bookedEvents.some(event => event.event_id === eventID);
+    };
 
     return (
         <div className="parent-container">
@@ -88,6 +109,7 @@ const Home = () => {
                                 categories={event.event_tags}
                                 image={event.image}
                                 orgID={event.org_id}
+                                booked={isBooked(event.event_id)}
                             />
                         ))}
                     </div>
@@ -111,6 +133,7 @@ const Home = () => {
                                 categories={event.event_tags}
                                 image={event.image}
                                 orgID={event.org_id}
+                                booked={isBooked(event.event_id)}
                             />
                         ))}
                     </div>
@@ -134,6 +157,7 @@ const Home = () => {
                                 categories={event.event_tags}
                                 image={event.image}
                                 orgID={event.org_id}
+                                booked={isBooked(event.event_id)}
                             />
                         ))}
                     </div>
@@ -141,6 +165,6 @@ const Home = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Home;
