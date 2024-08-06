@@ -7,7 +7,6 @@ import {
     MdEmail, 
     MdLanguage, 
     MdPhone,
-    MdPerson,
     MdChat
 } from "react-icons/md";
 import Header from "../../components/(universal)/header";
@@ -18,6 +17,7 @@ import ReviewModal from "../../components/(attendee)/reviewModal";
 import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 import ToastMessage from "../../components/(universal)/toast";
 import { addUserInterests, bookEvent } from "../../utils/bookEvent";
+import defaultAvatar from "../../assets/default-avatar.png"
 
 const EventPage = () => {
     const navigate = useNavigate();
@@ -137,13 +137,8 @@ const EventPage = () => {
                     <div>
                         <p className="custom-underline">Organizer</p>
                         <div className="event-organizer-container">
-                            {organizer_logo === undefined ? (
-                                <MdPerson size={130} />
-                            ) : (
-                                <img src={organizer_logo} alt="organizer-logo" className="organizer-logo" onClick={() => alert(organizer_logo)}/> 
-                            )}
+                                <img src={organizer_logo || defaultAvatar} alt="organizer-logo" className="organizer-logo" onClick={() => alert(organizer_logo)}/> 
                             <div className="event-organizer-details">
-                                <p>{organizer}</p>
                                 <div className="event-organizer-detail">
                                     <MdEmail />
                                     <p>{organizer}</p>
