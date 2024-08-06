@@ -18,7 +18,7 @@ const AttendeeReview = ({ review }) => {
                     <div className="review-rating">
                         {renderStars(review.rating)}
                     </div>
-                    <div className="review-author">{review.name}</div>
+                    <div className="review-author">{review.first_name} {review.last_name}</div>
                 </div>
             </div>
             <p className="review-content">{review.content}</p>
