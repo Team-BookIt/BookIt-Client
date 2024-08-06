@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
     MdAccessTime, 
@@ -18,6 +18,8 @@ import ConfirmationModal from "../../components/(universal)/actionConfirmationMo
 import ToastMessage from "../../components/(universal)/toast";
 import { addUserInterests, bookEvent } from "../../utils/bookEvent";
 import defaultAvatar from "../../assets/default-avatar.png"
+import { getEventById } from "../../utils/getEventById";
+import noReview from "../../assets/no-reviews.png"
 
 const EventPage = () => {
     const navigate = useNavigate();
@@ -28,6 +30,7 @@ const EventPage = () => {
     const [showTaost, setShowToast] = useState(false);
     const [toastType, setToastType] = useState("");
     const [toastMessage, setToastMessage] = useState("");
+    const [eventReviews, setEventReviews] = useState([]);
 
     const {
         name,
@@ -40,8 +43,18 @@ const EventPage = () => {
         orgID,
         categories,
         isEnded,
-        id
+        id,
+        booked
     } = location.state || {};
+
+    useEffect(() => {
+        const fetchEvent = async () => {
+            const eventData = await getEventById(id);
+            setEventReviews(eventData.eventReviews);
+        }
+
+        fetchEvent();
+    }, [id]);
 
     const openReviewModal = () => {
         setIsReviewModalOpen(true);
@@ -94,12 +107,20 @@ const EventPage = () => {
         });
     };
 
-    const review = {
-        imageUrl: "https://example.com/image.jpg",
-        name: "Tommy M. Laird",
-        rating: 4, // Rating out of 5
-        content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
-    };
+    const renderReviews = (reviews) => {
+        if (reviews.length === 0) {
+            return (
+                <div className="no-events-img-container">
+                    <img src={noReview} alt="no reviews" className="no-events-img" />
+                </div>
+            )
+        }
+        return (reviews.map((review) => (
+            <AttendeeReview 
+                review={review}
+            />
+        )))
+    }
 
     return (
         <div className="parent-container">
@@ -173,10 +194,17 @@ const EventPage = () => {
                             </div>
                         </div>
                     )}
+
                     {!isEnded ? (
-                        <div>
-                            <PrimaryButton title={"Book It"} onButtonClick={handleBookEventPress} />
-                        </div>
+                        !booked ? (
+                            <div>
+                                <PrimaryButton title={"Book It"} onButtonClick={handleBookEventPress} />
+                            </div>
+                        ) : (
+                            <div className="cancel-booking-button">
+                                <button type="submit">Cancel Booking</button>
+                            </div>
+                        )
                     ) : (                        
                         <div>
                             <div className="reviews-header">
@@ -188,18 +216,7 @@ const EventPage = () => {
                             </div>
 
                             <div>
-                                <AttendeeReview 
-                                    review={review} 
-                                />
-                                <AttendeeReview 
-                                    review={review} 
-                                />
-                                <AttendeeReview 
-                                    review={review} 
-                                />
-                                <AttendeeReview 
-                                    review={review} 
-                                />
+                                {renderReviews(eventReviews)}
                             </div>
                         </div>
                     )}
