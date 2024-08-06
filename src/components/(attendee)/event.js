@@ -37,7 +37,6 @@ const Event = ({
                 orgID
             }
         });
-        console.log("Organizer:", organizer);
     };
     
 
