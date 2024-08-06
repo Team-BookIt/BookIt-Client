@@ -15,13 +15,15 @@ const Event = ({
     categories, 
     id, 
     image,
-    orgID
+    orgID,
+    booked
 }) => {
     const navigate = useNavigate();
 
     const {date, time, isEnded} = formatTimestamp(timestamp);
 
     const handleEventPress = () => {
+        console.log("Event booked?", booked);
         navigate("/eventPage", {
             state: {
                 id,
@@ -34,7 +36,8 @@ const Event = ({
                 organizer_logo,
                 categories,
                 isEnded,
-                orgID
+                orgID,
+                booked
             }
         });
     };
