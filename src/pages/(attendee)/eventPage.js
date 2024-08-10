@@ -20,6 +20,7 @@ import { addUserInterests, bookEvent } from "../../utils/bookEvent";
 import defaultAvatar from "../../assets/default-avatar.png"
 import { getEventById } from "../../utils/getEventById";
 import noReview from "../../assets/no-reviews.png"
+import { cancelBooking } from "../../utils/cancelBooking";
 
 const EventPage = () => {
     const navigate = useNavigate();
@@ -49,6 +50,7 @@ const EventPage = () => {
 
     useEffect(() => {
         const fetchEvent = async () => {
+            console.log("Event id:", id);
             const eventData = await getEventById(id);
             setEventReviews(eventData.eventReviews);
         }
@@ -64,22 +66,26 @@ const EventPage = () => {
         setIsReviewModalOpen(false);
     };
 
-    const handleBookEventPress = () => {
+    const handleButtonPress = () => {
         setShowConfirmationModal(true);
     };
 
     const onYesPress = async() => {
-        const booking = await bookEvent(id);
-        await addUserInterests(categories);
-        if (booking.message === "Event registration successful") {
-            setToastMessage("Event booked successfully!");
-            setToastType("success");
-        } else if (booking.message === "Seems you've already booked this event") {
-            setToastMessage("Seems you've already booked this event");
-            setToastType("warning");
-        } else {
-            setToastMessage("Failed to book event");
-            setToastType("error");
+        if (!booked){
+            const booking = await bookEvent(id);
+            await addUserInterests(categories);
+            if (booking.message === "Event registration successful") {
+                setToastMessage("Event booked successfully!");
+                setToastType("success");
+            } else if (booking.message === "Seems you've already booked this event") {
+                setToastMessage("Seems you've already booked this event");
+                setToastType("warning");
+            } else {
+                setToastMessage("Failed to book event");
+                setToastType("error");
+            }
+        } else if (booked) {
+            await cancelBooking(id);
         }
 
         setShowToast(true);
@@ -108,18 +114,19 @@ const EventPage = () => {
     };
 
     const renderReviews = (reviews) => {
-        if (reviews.length === 0) {
+        if (!reviews) {
             return (
                 <div className="no-events-img-container">
                     <img src={noReview} alt="no reviews" className="no-events-img" />
                 </div>
             )
+        } else {
+            return (reviews.map((review) => (
+                <AttendeeReview 
+                    review={review}
+                />
+            )))
         }
-        return (reviews.map((review) => (
-            <AttendeeReview 
-                review={review}
-            />
-        )))
     }
 
     return (
@@ -198,10 +205,10 @@ const EventPage = () => {
                     {!isEnded ? (
                         !booked ? (
                             <div>
-                                <PrimaryButton title={"Book It"} onButtonClick={handleBookEventPress} />
+                                <PrimaryButton title={"Book It"} onButtonClick={handleButtonPress} />
                             </div>
                         ) : (
-                            <div className="cancel-booking-button">
+                            <div className="cancel-booking-button" onClick={handleButtonPress}>
                                 <button type="submit">Cancel Booking</button>
                             </div>
                         )
