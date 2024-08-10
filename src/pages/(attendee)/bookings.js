@@ -29,11 +29,16 @@ const Bookings = () => {
                 <div className="booked-events-container">
                     {bookedEvents && bookedEvents.map((event) => (
                         <BookedEvent 
-                            key={event.event_id} 
+                            id={event.event_id} 
                             name={event.title} 
                             venue={event.venue} 
                             timestamp={event.event_timestamp} 
                             image={event.image}
+                            description={event.bio}
+                            organizer={event.organizer_name}
+                            organizer_logo={event.organizer_logo}
+                            orgID={event.org_id}
+                            categories={event.event_tags}
                         />
                     ))}
                 </div>
