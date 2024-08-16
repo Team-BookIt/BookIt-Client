@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Loading from "./loading";
 
-const ConfirmationModal = ({ message, onYesPress, onNoPress }) => {
+const ConfirmationModal = ({ message, onYesPress, onNoPress, loading }) => {
     return (
         <div className="confirmation-modal-overlay" onClick={onNoPress}>
             <div className="confirmation-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -10,7 +11,7 @@ const ConfirmationModal = ({ message, onYesPress, onNoPress }) => {
                 </div>
                 <div className="confirmation-modal-actions">
                     <button className="confirmation-modal-button confirmation-yes-button" onClick={onYesPress}>
-                        Yes
+                        {loading ? <Loading /> : "Yes"}
                     </button>
                     <button className="confirmation-modal-button confirmation-no-button" onClick={onNoPress}>
                         No
