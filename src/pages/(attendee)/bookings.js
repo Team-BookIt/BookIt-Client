@@ -3,6 +3,7 @@ import SearchBar from "../../components/(universal)/searchBar";
 import BookedEvent from "../../components/(attendee)/bookedEvent";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
+import BookedEventLoader from "../../components/(universal)/bookedEventLoader";
 import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
 
 const Bookings = () => {
@@ -27,7 +28,7 @@ const Bookings = () => {
                 <SearchBar />
 
                 <div className="booked-events-container">
-                    {bookedEvents && bookedEvents.map((event) => (
+                    {bookedEvents.length > 0 ? bookedEvents.map((event) => (
                         <BookedEvent 
                             id={event.event_id} 
                             name={event.title} 
@@ -40,7 +41,9 @@ const Bookings = () => {
                             orgID={event.org_id}
                             categories={event.event_tags}
                         />
-                    ))}
+                    )) : (
+                        [1, 2, 3, 4, 5, 6, 7, 8].map((index) => <BookedEventLoader key={index} />)
+                    )}
                 </div>
             </div>
         </div>
