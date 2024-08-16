@@ -32,6 +32,7 @@ const EventPage = () => {
     const [toastType, setToastType] = useState("");
     const [toastMessage, setToastMessage] = useState("");
     const [eventReviews, setEventReviews] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const {
         name,
@@ -48,6 +49,9 @@ const EventPage = () => {
         booked
     } = location.state || {};
 
+    const [eventBooked, setEventBooked] = useState(booked);
+
+
     useEffect(() => {
         const fetchEvent = async () => {
             console.log("Event id:", id);
@@ -57,6 +61,8 @@ const EventPage = () => {
 
         fetchEvent();
     }, [id]);
+
+    const eventID = Number(id);
 
     const openReviewModal = () => {
         setIsReviewModalOpen(true);
@@ -71,6 +77,8 @@ const EventPage = () => {
     };
 
     const onYesPress = async() => {
+        setLoading(true);
+        console.log("Event booked?", booked);
         if (!booked){
             const booking = await bookEvent(id);
             await addUserInterests(categories);
@@ -85,11 +93,22 @@ const EventPage = () => {
                 setToastType("error");
             }
         } else if (booked) {
-            await cancelBooking(id);
+            const cancel = await cancelBooking(eventID);
+            if (cancel.message === "Event booking cancelled successfully") {
+                setToastMessage("Event cancellation successful!");
+                setToastType("success");
+            } else if (cancel.message === "Booking not found") {
+                setToastMessage("You haven't booked this event.");
+                setToastType("warning");
+            } else {
+                setToastMessage("Failed to cancel event");
+                setToastType("error");
+            }
         }
 
-        setShowToast(true);
         setShowConfirmationModal(false);
+        setShowToast(true);
+        setTimeout(() => navigate("/home"), 1000);
     }
 
     const onNoPress = () => {
@@ -181,7 +200,7 @@ const EventPage = () => {
                                 </div>
 
                                 <div>
-                                    <button onClick={handleViewOrganizerProfile}>
+                                    <button className="view-profile" onClick={handleViewOrganizerProfile}>
                                         View Profile
                                     </button>
                                 </div>
@@ -229,13 +248,14 @@ const EventPage = () => {
                     )}
                 </div>
             </div>
-            <ReviewModal isOpen={isReviewModalOpen} onRequestClose={closeReveiwModal} />
+            <ReviewModal isOpen={isReviewModalOpen} onRequestClose={closeReveiwModal} eventID={id} />
 
             {showConfirmationModal && (
                 <ConfirmationModal 
                     onYesPress={onYesPress} 
                     onNoPress={onNoPress} 
                     message="Are you sure you want to book this event?" 
+                    loading={loading}
                 />
             )}
 

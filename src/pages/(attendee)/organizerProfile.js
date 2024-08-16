@@ -52,7 +52,7 @@ const OrganizerProfile = () => {
         getOrganizerEvents();
         setPastEvents(past);
         setUpcomingEvents(upcoming);
-    }, [organizerEvents, orgID]);
+    }, []);
 
     const renderEvents = (events) => {
         if (events.length === 0) {
@@ -66,13 +66,14 @@ const OrganizerProfile = () => {
         return events.map((event) => (
             <Event
                 key={event.id}
+                id={event.id} 
                 name={event.title}
                 rate={20}
                 timestamp={event.event_timestamp}
                 venue={event.venue}
                 description={event.bio}
                 categories={["Tech", "Fun", "Party"]}
-                id={1} 
+                image={event.image}
                 isEnded
             />
         ))
