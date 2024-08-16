@@ -6,6 +6,8 @@ import { getUserData } from "../../utils/getUserData";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
+import CardSkeleton from "../../components/(universal)/cardLoader";
+import noEvents from "../../assets/no-events.png"
 
 const Home = () => {
     const [user, setUser] = useState({});
@@ -14,6 +16,8 @@ const Home = () => {
     const [upcomingEvents, setUpcomingEvents] = useState([]);
     const [interestedEvents, setInterestedEvents] = useState([]);
     const [bookedEvents, setBookedEvents] = useState([]);
+    const [filteredEvents, setFilteredEvents] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchEventsData = async () => {
@@ -58,13 +62,13 @@ const Home = () => {
         const interested = upcomingEvents.filter((event) => {
             const tags = event.event_tags || [];
             const interests = user.interests || [];
-            return (tags.some(tag => interests.includes(tag)));
+            return (interests.length !==0 ? tags.some(tag => interests.includes(tag)) : []);
         });
 
         setInterestedEvents(interested);
         setUpcomingEvents(upcoming);
         setPastEvents(past);
-    }, [events, upcomingEvents, user.interests]);
+    }, [events, upcomingEvents]);
 
     useEffect(() => {
         const getBookedEvents = async () => {
@@ -80,6 +84,25 @@ const Home = () => {
         getBookedEvents();
     }, []);
 
+    
+    const handleSearch = (searchTerm) => {
+        const trimmedTerm = searchTerm.trim();
+        setSearchTerm(trimmedTerm);
+
+        const lowercasedFilter = trimmedTerm.toLowerCase();
+        const filteredData = events.filter((event) => {
+            return (
+                (event.title && event.title.toLowerCase().includes(lowercasedFilter)) ||
+                (event.venue && event.venue.toLowerCase().includes(lowercasedFilter)) ||
+                (event.bio && event.bio.toLowerCase().includes(lowercasedFilter)) ||
+                (event.event_tags && event.event_tags.some(tag => tag && tag.toLowerCase().includes(lowercasedFilter)))
+            );
+        });
+    
+        setFilteredEvents(filteredData);
+    };
+    
+
     const isBooked = (eventID) => {
         return Array.isArray(bookedEvents) && bookedEvents.some(event => event.event_id === eventID);
     };
@@ -90,28 +113,60 @@ const Home = () => {
             <SideBar activePage={"Home"} />
             <div className="page-container">
                 <p>Hi there, {user && user.first_name ? user.first_name : "User"}</p>
-                <SearchBar />
+                <SearchBar onSearch={handleSearch} />
+
+                {searchTerm && (
+                    <div className="home-section">
+                        <p className="custom-underline">Search results</p>
+                        <div className="events-container">
+                            {filteredEvents.length !== 0 ? filteredEvents.map(event => (
+                                <Event
+                                    key={event.event_id}
+                                    id={event.event_id}
+                                    name={event.title}
+                                    rate={event.price}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    description={event.bio}
+                                    organizer={event.organizer_name}
+                                    organizer_logo={event.organizer_logo}
+                                    categories={event.event_tags}
+                                    image={event.image}
+                                    orgID={event.org_id}
+                                    booked={isBooked(event.event_id)}
+                                />
+                            )) : (
+                                <div className="empty-search">
+                                    <img src={noEvents} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 
                 <div className="home-section">
                     <p className="custom-underline">Events you might like</p>
                     <div className="events-container">
-                        {interestedEvents && interestedEvents.map(event => (
-                            <Event
-                                key={event.event_id}
-                                id={event.event_id}
-                                name={event.title}
-                                rate={event.price}
-                                timestamp={event.event_timestamp}
-                                venue={event.venue}
-                                description={event.bio}
-                                organizer={event.organizer_name}
-                                organizer_logo={event.organizer_logo}
-                                categories={event.event_tags}
-                                image={event.image}
-                                orgID={event.org_id}
-                                booked={isBooked(event.event_id)}
-                            />
-                        ))}
+                        {interestedEvents !== 0 ? interestedEvents.map(event => (
+                                <Event
+                                    key={event.event_id}
+                                    id={event.event_id}
+                                    name={event.title}
+                                    rate={event.price}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    description={event.bio}
+                                    organizer={event.organizer_name}
+                                    organizer_logo={event.organizer_logo}
+                                    categories={event.event_tags}
+                                    image={event.image}
+                                    orgID={event.org_id}
+                                    booked={isBooked(event.event_id)}
+                                />
+                        )) : (
+                            [1, 2, 3, 4].map((index) => <CardSkeleton key={index} />)
+                        )}
                     </div>
                 </div>
 
@@ -119,7 +174,7 @@ const Home = () => {
                 <div className="home-section">
                     <p className="custom-underline">Upcoming Events</p>
                     <div className="events-container">
-                        {upcomingEvents.map(event => (
+                        {upcomingEvents.length !== 0 ? upcomingEvents.map(event => (
                             <Event
                                 key={event.event_id}
                                 id={event.event_id}
@@ -135,7 +190,9 @@ const Home = () => {
                                 orgID={event.org_id}
                                 booked={isBooked(event.event_id)}
                             />
-                        ))}
+                        )) : (
+                            [1, 2, 3, 4].map((index) => <CardSkeleton key={index} />)
+                        )}
                     </div>
                 </div>
 
@@ -143,7 +200,7 @@ const Home = () => {
                 <div className="home-section">
                     <p className="custom-underline">Past Events</p>
                     <div className="events-container">
-                        {pastEvents && pastEvents.map(event => (
+                        {pastEvents.length !== 0 ? pastEvents.map(event => (
                             <Event
                                 key={event.event_id}
                                 id={event.event_id}
@@ -159,7 +216,9 @@ const Home = () => {
                                 orgID={event.org_id}
                                 booked={isBooked(event.event_id)}
                             />
-                        ))}
+                        )) : (
+                            [1, 2, 3, 4].map((index) => <CardSkeleton key={index} />)
+                        )}
                     </div>
                 </div>
             </div>
