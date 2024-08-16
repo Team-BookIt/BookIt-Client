@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
+import { submitReview } from '../../utils/submitReview';
 
-const ReviewModal = ({ isOpen, onRequestClose }) => {
+const ReviewModal = ({ isOpen, onRequestClose, eventID }) => {
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -13,11 +14,12 @@ const ReviewModal = ({ isOpen, onRequestClose }) => {
     setRating(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
     console.log('Review:', review);
     console.log('Rating:', rating);
+    await submitReview(eventID);
     onRequestClose();
   };
 
