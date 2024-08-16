@@ -12,15 +12,7 @@ const PastEvent = ({
     const navigate = useNavigate();
 
     const handleEventPress = () => {
-        navigate("/eventPage", {
-            state: {
-                name, 
-                attendees,
-                attendanceRate,
-                reviews,
-                ratings
-            }
-        });
+        
     };
 
     return (

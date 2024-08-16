@@ -45,7 +45,7 @@ const Event = ({
 
     return (
         <div className="event-container">
-            <div className="event-header">
+            <div className="event-container-header">
                 <img src={image && image !== "" && Object.keys(image).length !== "" ? image : defaultImg} alt="event flyer" />
             </div>
             <div className="event-info-container">

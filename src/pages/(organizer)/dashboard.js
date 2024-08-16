@@ -30,11 +30,15 @@ const Dashboard = () => {
     const handlePastClick = () => setFilter("past");
     const handleUpcomingClick = () => setFilter("upcoming");
 
-    const handleEventPress = (eventData) => {
+    const handleUpcomingEventPress = (eventData) => {
         console.log("Individual event details :", eventData);
         setEventDetails(eventData);
         setShowWaitlist(true);
     };
+
+    const handlePastEventPress = () => {
+
+    }
 
     useEffect(() => {
         const orgData = getOrganizerData();
@@ -46,6 +50,7 @@ const Dashboard = () => {
             console.log("Organizer ID:", orgID)
             try {
                 const organizerProfile = await getOrganizerProfile(orgID);
+                console.log("Organizer events:", organizerProfile.organizerEventDetails);
                 if (organizerProfile.organizerEventDetails) {
                     setOrganizerEvents(organizerProfile.organizerEventDetails);
                 }
@@ -121,7 +126,7 @@ const Dashboard = () => {
                                 categories={["Tech", "Fun", "Party"]}
                                 event_id={event.event_id}
                                 waitlist={45}
-                                onEventPress={handleEventPress}
+                                onEventPress={handleUpcomingEventPress}
                                 />
                             ))}
                     {filter === "past" &&

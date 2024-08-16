@@ -97,8 +97,9 @@ const Signup = () => {
 
     const handleOrganizerSignup = async (event) => {
         event.preventDefault();
-        setLoading(true)        ;
+        setLoading(true);
 
+        console.log("Organizer details:", organizerDetails);
         if (organizerDetails.password === passwordConfirm) {
             try {
                 const response = await axios.post(`${backendRoute}/auth/org/signup`, organizerDetails);
