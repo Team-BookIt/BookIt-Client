@@ -1,40 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { MdUpload } from "react-icons/md";
+import { MdCheck, MdDeleteOutline, MdEdit, MdOutlineCameraAlt, MdOutlineLock, MdExitToApp, MdOutlineInfo } from "react-icons/md";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(organizer)/sideBar";
-import EditFieldModal from "../../components/(organizer)/editOrgFieldModal";
-import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import { getOrganizerData } from "../../utils/getOrganizerData";
 
+import defaultAvatar from "../../assets/default-avatar.png";
+import { editOrganizerProfile } from "../../utils/editOrgProfile";
+
 const OrganizerSettings = () => {
     const navigate = useNavigate();
+    const [editable, setEditable] = useState(false);
     const [organizerData, setOrganizerData] = useState({});
-
-    const name = organizerData.name || "Not set";
-    const email = organizerData.email || "Not set";
-    const contact = organizerData.contact || "Not set";
-    const location = organizerData.location || "Not set";
-    const website = organizerData.website || "Not set";
-    const bio = organizerData.bio || "Not set";
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
         const organizer = getOrganizerData();
         setOrganizerData(organizer);
-    }, [])
+    }, []);
 
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [field, setField] = useState("");
-    const [type, setType] = useState("");
-    const [value, setValue] = useState("");
-
-    const handleEditPress = (field, type, value) => {
-        setField(field);
-        setValue(value);
-        setType(type);
-        setShowEditModal(true);
+    const handleFileChange = (event) => {
+        setSelectedFile(URL.createObjectURL(event.target.files[0]));
     };
+
+    const handleDelete = () => {
+        setSelectedFile(null);
+    };
+
+    const handleEditPress = () => {
+        setEditable(true);
+    }
+
+    const handleSavePress = async () => {
+        setEditable(false);
+        await editOrganizerProfile(profile);
+    }
+
+    const handleInputChange = (field, value) => {
+        setProfile(prevProfile => ({
+            ...prevProfile,
+            [field]: value
+        }))
+    }
 
     const closeEditModal = () => {
         setShowEditModal(false);
@@ -56,165 +66,180 @@ const OrganizerSettings = () => {
             <SideBar activePage={"Settings"} />
 
             <div className="page-container">
-                <h1>Your Account</h1>
-
-                {showEditModal && (
-                    <EditFieldModal
-                        field={field}
-                        type={type}
-                        value={value}
-                        onClose={closeEditModal}
-                    />
-                )}
-
-                {showConfirmationModal && (
-                    <ConfirmationModal 
-                        message="Are you sure you want to log out?"
-                        onYesPress={handleYesPress}
-                        onNoPress={handleNoPress}
-                    />
-                )}
-
-                <div className="settings-container">
-                    <div className="pic-upload">
-                        <div className="profile-image">
-                            K
-                        </div>
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Upload your profile photo
+            <div className="settings-container">
+                    {/* edits start */}
+                    <div className="settings-header">
+                        <div className="avatar-upload-container">
+                            <div className="avatar-wrapper">
+                                <img src={selectedFile || defaultAvatar} alt="Avatar" className="avatar-image" />
+                                {editable && (
+                                    <div>
+                                        <label htmlFor="file-input" className="camera-icon-wrapper">
+                                            <MdOutlineCameraAlt className="camera-icon" />
+                                        </label>
+                                        <input id="file-input" accept="image/*" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
+                                    </div>
+                                )}
                             </div>
-                            <div className="sub-text">
-                                This will help friends recognize you on BookIt!
-                            </div>
+
+                            {editable && selectedFile && (                                
+                                <div className="delete-button-container" onClick={handleDelete}>
+                                    <button className="delete-button">Delete avatar</button>
+                                    <MdDeleteOutline size={30} />
+                                </div>
+                            )}
                         </div>
+
                         <div>
-                            <label className="edit-button">
-                                <input type="file" accept="image/*" />
-                                Upload
-                                <MdUpload className="upload-icon" />
-                            </label>
+                            {editable === false ? (
+                                <div className="edit-button" onClick={handleEditPress}>
+                                    <p>Edit Profile</p>
+                                    <MdEdit />
+                                </div>
+                            ) : (
+                                <div className="edit-button" onClick={handleSavePress}>
+                                    <p>Save Changes</p>
+                                    <MdCheck />
+                                </div>
+                            )}
                         </div>
                     </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
+                    <div className="pwd-group-heading">
+                        <p>Basic Info</p>
+                        <MdOutlineInfo />
+                    </div>
+
+                    <div className="name-group">
+                        <div className="input-group">
+                            <label>
                                 Name
-                            </div>
-                            <div className="sub-text">
-                                {organizerData && name}
-                            </div>
+                            </label>
+                            <input 
+                                type="text"
+                                placeholder={""}
+                                value={profile.name}
+                                readOnly={!editable}
+                                className="field-input"
+                                onChange={(e) => handleInputChange("name", e.target.value)}
+                            />
                         </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("name", "text", name)}
-                            >
-                                Edit
-                            </button>
+                        <div className="input-group">
+                            <label>
+                                Email Address
+                            </label>
+                            <input 
+                                type="email"
+                                placeholder={""}
+                                value={profile.email}
+                                readOnly={!editable}
+                                onChange={(e) => handleInputChange("email", e.target.value)}
+                                className="field-input"
+                            />
                         </div>
-                    </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Email Address 
-                            </div>
-                            <div className="sub-text">
-                            {organizerData && email}
-                            </div>
+                        <div className="input-group">
+                            <label>
+                                Phone Number
+                            </label>
+                            <input 
+                                type="tel"
+                                placeholder={""}
+                                value={profile.contact}
+                                readOnly={!editable}
+                                onChange={(e) => handleInputChange("contact", e.target.value)}
+                                className="field-input"
+                            />
                         </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("email", "email", email)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Contact Info
-                            </div>
-                            <div className="sub-text">
-                                {organizerData && contact}
-                            </div>
-                        </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("contact", "text", contact)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
+                        <div className="input-group">
+                            <label>
                                 Location
-                            </div>
-                            <div className="sub-text">
-                                {organizerData && location}
-                            </div>
+                            </label>
+                            <input 
+                                type="text"
+                                placeholder={""}
+                                value={profile.location}
+                                readOnly={!editable}
+                                onChange={(e) => handleInputChange("location", e.target.value)}
+                                className="field-input"
+                            />
                         </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("location", "text", location)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
-                                Website Address
-                            </div>
-                            <div className="sub-text">
-                                {organizerData && website}
-                            </div>
+                        <div className="input-group">
+                            <label>
+                                Webiste Address
+                            </label>
+                            <input 
+                                type="website"
+                                placeholder={""}
+                                value={profile.website}
+                                readOnly={!editable}
+                                onChange={(e) => handleInputChange("website", e.target.value)}
+                                className="field-input"
+                            />
                         </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("website", "url", website)}
-                            >
-                                Edit
-                            </button>
-                        </div>
-                    </div>
 
-                    <div className="settings-field">
-                        <div className="settings-field-text">
-                            <div className="main-text">
+                        <div className="input-group">
+                            <label>
                                 Bio
-                            </div>
-                            <div className="sub-text">
-                                {organizerData && bio}
-                            </div>
-                        </div>
-                        <div>
-                            <button
-                                className="edit-button"
-                                onClick={() => handleEditPress("bio", "text", bio)}
-                            >
-                                Edit
-                            </button>
+                            </label>
+                            <input 
+                                type="text"
+                                placeholder={""}
+                                value={profile.bio}
+                                readOnly={!editable}
+                                onChange={(e) => handleInputChange("bio", e.target.value)}
+                                className="field-input"
+                            />
                         </div>
                     </div>
 
-                    <div className="password">
-                        <button className="edit-button" onClick={() => setShowConfirmationModal(true)}>
-                            Log out
-                        </button>
+                    <div className="pwd-group-heading">
+                        <p>Change Password</p>
+                        <MdOutlineLock />
+                    </div>
+
+                    <div className="name-group">
+                        <div className="input-group">
+                            <label>
+                                Current Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label>
+                                New Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            <label>
+                                Confirm New Password
+                            </label>
+                            <input 
+                                type="password"
+                                readOnly={!editable}
+                                className="field-input"
+                            />
+                        </div>
+                    </div>
+                    
+                    <div 
+                        style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 
+                        className="edit-button"
+                    >
+                        <p>Log out</p>
+                        <MdExitToApp size={30} />
                     </div>
                 </div>
             </div>
