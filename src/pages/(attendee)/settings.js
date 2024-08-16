@@ -4,9 +4,9 @@ import ConfirmationModal from "../../components/(universal)/actionConfirmationMo
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import { useNavigate } from "react-router-dom";
+import { editAttendeeProfile } from "../../utils/editAttendeeProfile";
 
-
-import defaultAvatar from "../../assets/default-avatar.png"
+import defaultAvatar from "../../assets/default-avatar.png";
 import { getUserData } from "../../utils/getUserData";
 
 const AttendeeSettings = () => {
@@ -16,6 +16,12 @@ const AttendeeSettings = () => {
     const [editable, setEditable] = useState(false);
     const [user, setUser] = useState({});
 
+    const [profile, setProfile] = useState({
+        first_name: user.first_name || "",
+        last_name: user.last_name || "",
+        email: user.email || "",
+    })
+
     useEffect(() => {
         const fetchUser = async() => {
             const userData = await getUserData();
@@ -23,7 +29,11 @@ const AttendeeSettings = () => {
         }
 
         fetchUser();
-    }, [])
+    }, []);
+
+    const handleLogOutPress = () => {
+        setShowConfirmationModal(true);
+    }
 
     const handleYesPress = () => {
         console.log("Yes pressed");
@@ -46,13 +56,23 @@ const AttendeeSettings = () => {
     const handleEditPress = () => {
         setEditable(!editable);
     }
+
+    const handleInputChange = (field, value) => {
+        setProfile(prevProfile => ({
+            ...prevProfile,
+            [field]: value
+        }))
+    }
+
+    const handleProfileUpdate = async () => {
+        await editAttendeeProfile(profile);
+    }
       
     return (
         <div>
             <Header title={"Settings"} />
             <SideBar activePage={"Settings"} />
             <div className="page-container">
-
                 <div className="settings-container">
                     {/* edits start */}
                     <div className="settings-header">
@@ -84,7 +104,7 @@ const AttendeeSettings = () => {
                                     <MdEdit />
                                 </div>
                             ) : (
-                                <div className="edit-button">
+                                <div className="edit-button" onClick={handleProfileUpdate}>
                                     <p>Save Changes</p>
                                     <MdCheck />
                                 </div>
@@ -105,7 +125,8 @@ const AttendeeSettings = () => {
                             <input 
                                 type="text"
                                 placeholder={user ? user.first_name : ""}
-                                value={user ? user.first_name : ""}
+                                value={profile.first_name}
+                                onChange={(e) => handleInputChange("first_name", e.target.value)}
                                 readOnly={!editable}
                                 className="field-input"
                             />
@@ -117,7 +138,8 @@ const AttendeeSettings = () => {
                             <input 
                                 type="text"
                                 placeholder={user ? user.last_name : ""}
-                                value={user ? user.last_name : ""}
+                                value={profile.last_name}
+                                onChange={(e) => handleInputChange("last_name", e.target.value)}
                                 readOnly={!editable}
                                 className="field-input"
                             />
@@ -130,7 +152,8 @@ const AttendeeSettings = () => {
                             <input 
                                 type="email"
                                 placeholder={user ? user.email : ""}
-                                value={user ? user.email : ""}
+                                value={profile.emailAddress}
+                                onChange={(e) => handleInputChange("email", e.target.value)}
                                 readOnly={!editable}
                                 className="field-input"
                             />
@@ -179,19 +202,20 @@ const AttendeeSettings = () => {
                     <div 
                         style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 
                         className="edit-button"
+                        onClick={handleLogOutPress}
                     >
                         <p>Log out</p>
                         <MdExitToApp size={30} />
                     </div>
                 </div>
 
-                    {showConfirmationModal && (
-                        <ConfirmationModal 
-                            message="Are you sure you want to log out?"
-                            onYesPress={handleYesPress}
-                            onNoPress={handleNoPress}
-                        />
-                    )}
+                {showConfirmationModal && (
+                    <ConfirmationModal 
+                        message="Are you sure you want to log out?"
+                        onYesPress={handleYesPress}
+                        onNoPress={handleNoPress}
+                    />
+                )}
             </div>
         </div>
     );
