@@ -4,6 +4,8 @@ Welcome to the BookIt! web app frontend repository.
 
 ## Getting Started
 
+Fork the repository and create a clone of the forked repository.
+
 In the project directory, you can run:
 
 ### `npm install`
