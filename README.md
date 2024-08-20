@@ -17,5 +17,5 @@ This will install all the necessary dependencies.
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-
+<br><br>
 <i>Enjoy the BookIt experience!🚀✨</i>
