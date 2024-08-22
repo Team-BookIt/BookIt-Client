@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backendURL = "https://book-it-server-sigma.vercel.app";
-const orgID = Number(JSON.parse(localStorage.getItem("organizer")).id);
+const orgID = Number(JSON.parse(localStorage.getItem("organizer")).id) || "";
 
 export const editOrganizerProfile = async( field ) => {
     try {

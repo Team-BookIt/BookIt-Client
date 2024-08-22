@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MdCheck, MdDeleteOutline, MdEdit, MdOutlineCameraAlt, MdOutlineLock, MdExitToApp, MdOutlineInfo } from "react-icons/md";
+import { MdCheck, MdDeleteOutline, MdEdit, MdOutlineCameraAlt, MdExitToApp, MdOutlineInfo } from "react-icons/md";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(organizer)/sideBar";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,7 @@ const OrganizerSettings = () => {
     const handleSavePress = async () => {
         setEditable(false);
         await editOrganizerProfile(profile);
+        console.log("Profile:", profile);
     }
 
     const handleInputChange = (field, value) => {
@@ -195,7 +196,7 @@ const OrganizerSettings = () => {
                         </div>
                     </div>
 
-                    <div className="pwd-group-heading">
+                    {/* <div className="pwd-group-heading">
                         <p>Change Password</p>
                         <MdOutlineLock />
                     </div>
@@ -232,7 +233,7 @@ const OrganizerSettings = () => {
                                 className="field-input"
                             />
                         </div>
-                    </div>
+                    </div> */}
                     
                     <div 
                         style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 

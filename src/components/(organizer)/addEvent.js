@@ -5,23 +5,24 @@ import axios from 'axios';
 import Select from "react-select";
 import 'react-datepicker/dist/react-datepicker.css';
 import ToastMessage from '../(universal)/toast';
-import { useForm } from 'react-hook-form';
 import Loading from '../(universal)/loading';
-import Resizer from 'react-image-file-resizer';
 
 const AddEvent = ({ organizerID, onSuccess }) => {
 	const backendURL = "https://book-it-server-sigma.vercel.app";
-
-	const { register, handleSubmit } = useForm();
 
 	const [date, setDate] = useState(new Date());
 	const [eventTitle, setEventTitle] = useState('');
 	const [eventDescription, setEventDescription] = useState('');
 	const [eventVenue, setEventVenue] = useState('');
 	const [eventCategories, setEventCategories] = useState([]);
+	const [price, setPrice] = useState("");
+	const [image, setImage] = useState("");
 	const [customCategory, setCustomCategory] = useState("");
 	const [showToast, setShowToast] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	const presetKey = "bookit";
+    const cloudName = "dmht0mpfq";
 
 	const handleShowToast = () => {
 		setShowToast(true);
@@ -44,8 +45,11 @@ const AddEvent = ({ organizerID, onSuccess }) => {
 
 	const handleAddCustomCategory = () => {
 		if (customCategory.trim() !== "") {
-			const newCategory = { value: customCategory, label: customCategory };
-			setEventCategories((prevCategories) => [...prevCategories, newCategory]);
+			const existingCategory = eventCategories.find(cat => cat.value === customCategory);
+			if (!existingCategory) {
+				const newCategory = { value: customCategory, label: customCategory };
+				setEventCategories(prevCategories => [...prevCategories, newCategory]);
+			}
 			setCustomCategory("");
 		}
 	};
@@ -61,54 +65,54 @@ const AddEvent = ({ organizerID, onSuccess }) => {
 		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 	};
 
-	const resizeFile = (file) =>
-		new Promise((resolve) => {
-			Resizer.imageFileResizer(
-				file,
-				800, // max width
-				800, // max height
-				'JPEG', // format
-				70, // quality
-				0, // rotation
-				(uri) => {
-					resolve(uri);
-				},
-				'blob'
-			);
-		});
-
-	const handleAddEvent = async (data) => {
-		setLoading(true);
-		console.log("Org id from add event:", organizerID);
+	const uploadImage = async (e) => {
+		const file = e.target.files[0];
 		const formData = new FormData();
-		formData.append("organizerID", organizerID);
-		formData.append("eventDetails[coreEventDetails][title]", eventTitle);
-		formData.append("eventDetails[coreEventDetails][venue]", eventVenue);
-		formData.append("eventDetails[coreEventDetails][bio]", eventDescription);
-		formData.append("eventDetails[coreEventDetails][event_timestamp]", formatTimestamp(date));
-		formData.append("eventDetails[coreEventDetails][price]", 0.00);
-		
-		const resizedImage = await resizeFile(data.file[0]);
-		console.log("Resized image:", resizedImage);
-		formData.append("image", resizedImage);
+	
+		formData.append("file", file);
+		formData.append("upload_preset", presetKey);
+		formData.append("cloud_name", cloudName);
+	
+		try {
+			const res = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData);
+			console.log("Response:", res);
+			setImage(res.data.secure_url);
+		} catch (err) {
+			console.log("Error uploading image:", err);
+		}
+	};
+	
 
-		let categories = [];
-		eventCategories.forEach((category, index) => {
-			categories[index] = category.value;
-		});
-		formData.append("eventCategories", categories);
-
-		for (let pair of formData.entries()) {
-			console.log(pair[0] + ': ' + pair[1]);
+	const handleAddEvent = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+	
+		const categories = eventCategories.map(category => category.value);
+	
+		let eventDetails = {
+			coreEventDetails: {
+				title: eventTitle,
+				event_timestamp: formatTimestamp(date),
+				price: price,
+				venue: eventVenue,
+				bio: eventDescription,
+			},
+			additionalEventDetails: {
+				image: image
+			}
 		}
 
+		const data = {organizerID, eventDetails, eventCategories};
+
+		
+
+		
+		// console.log("Event Details:", eventDetails);
+		// console.log("Event Details:", eventDetails);
+		console.log("Event Details:", data);
 		try {
-			const response = await axios.post(`${backendURL}/events/create`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			});
-			console.log("Event created:", response);
+			const response = await axios.post(`${backendURL}/events/create`, { organizerID, eventDetails, eventCategories });
+			console.log("Event publishing status:", response.data);
 			handleShowToast();
 		} catch (error) {
 			console.error("Error creating a new event:", error);
@@ -122,7 +126,7 @@ const AddEvent = ({ organizerID, onSuccess }) => {
 			<div className="event-form-header">
 				<p>Add Event</p>
 			</div>
-			<form onSubmit={handleSubmit(handleAddEvent)}>
+			<form onSubmit={handleAddEvent}>
 				<div className="event-form-group">
 					<label htmlFor="eventTitle">Event Title *</label>
 					<input
@@ -153,9 +157,9 @@ const AddEvent = ({ organizerID, onSuccess }) => {
 					<input 
 						type="file" 
 						accept="image/*" 
-						{...register("file")}
 						id="eventFlyer" 
 						className="event-form-input-file"
+						onChange={uploadImage}
 					/>
 					<div className="event-form-info">
 						<MdInfo />
@@ -185,6 +189,19 @@ const AddEvent = ({ organizerID, onSuccess }) => {
 						value={eventVenue}
 						onChange={(e) => setEventVenue(e.target.value)}
 						placeholder="Where's your event taking place?"
+						required
+					/>
+				</div>
+
+				<div className="event-form-group">
+					<label htmlFor="eventVenue">Price *</label>
+					<input
+						type="text"
+						id="eventPrice"
+						className="event-form-input"
+						value={price}
+						onChange={(e) => setPrice(e.target.value)}
+						placeholder="How much is a ticket?"
 						required
 					/>
 				</div>

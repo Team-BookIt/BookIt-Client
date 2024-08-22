@@ -9,10 +9,10 @@ const UpcomingEvent = ({
     timestamp,
     venue,
     description,
-    categories,
     waitlist,
     event_id,
     onEventPress,
+    image
 }) => {
     const { date, time } = formatTimestamp(timestamp);
     rate = rate !== 0 ? "GHS " + rate.toFixed(2) : "Free";
@@ -28,8 +28,8 @@ const UpcomingEvent = ({
 
     return (
         <div className="event-container">
-            <div className="event-header">
-                <img alt="event flyer" />
+            <div className="event-container-header">
+                <img src={image} alt="event flyer" />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
@@ -59,7 +59,7 @@ const UpcomingEvent = ({
                     </div>
                 </div>
 
-                {categories[0] !== null && (
+                {/* {categories[0] !== null && (
                     <div className="categories-container">
                         <p>Categories</p>
                         <div className="categories">
@@ -68,7 +68,7 @@ const UpcomingEvent = ({
                             ))}
                         </div>
                     </div>
-                )}
+                )} */}
             </div>
         </div>
     );

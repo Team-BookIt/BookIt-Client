@@ -5,14 +5,17 @@ import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import { useNavigate } from "react-router-dom";
 import { editAttendeeProfile } from "../../utils/editAttendeeProfile";
+import axios from "axios";
 
 import defaultAvatar from "../../assets/default-avatar.png";
 import { getUserData } from "../../utils/getUserData";
+import { upload } from "@testing-library/user-event/dist/upload";
 
 const AttendeeSettings = () => {
     const navigate = useNavigate();
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [image, setImage] = useState("");
     const [editable, setEditable] = useState(false);
     const [user, setUser] = useState({});
 
@@ -20,7 +23,11 @@ const AttendeeSettings = () => {
         first_name: user.first_name || "",
         last_name: user.last_name || "",
         email: user.email || "",
-    })
+        image: user.image || ""
+    });
+
+    const presetKey = "bookit";
+    const cloudName = "dmht0mpfq";
 
     useEffect(() => {
         const fetchUser = async() => {
@@ -33,6 +40,7 @@ const AttendeeSettings = () => {
 
     const handleLogOutPress = () => {
         setShowConfirmationModal(true);
+        localStorage.removeItem("user");
     }
 
     const handleYesPress = () => {
@@ -45,8 +53,34 @@ const AttendeeSettings = () => {
         setShowConfirmationModal(false);
     };
 
+    const uploadImage = async (e) => {
+        const file = e.target.files[0];
+        const formData = new FormData();
+    
+        formData.append("file", file);
+        formData.append("upload_preset", presetKey);
+        formData.append("cloud_name", cloudName);
+    
+        try {
+            const res = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData);
+            const imageUrl = res.data.secure_url;
+            console.log("Response:", res);
+    
+            // Update image state and profile state with the new image URL
+            setImage(imageUrl);
+            setProfile(prevProfile => ({
+                ...prevProfile,
+                image: imageUrl
+            }));
+        } catch (err) {
+            console.log("Error uploading image:", err);
+        }
+    };
+    
+
     const handleFileChange = (event) => {
         setSelectedFile(URL.createObjectURL(event.target.files[0]));
+        uploadImage(event);
     };
 
     const handleDelete = () => {
@@ -55,6 +89,7 @@ const AttendeeSettings = () => {
 
     const handleEditPress = () => {
         setEditable(!editable);
+        console.log("Image:", user.image);
     }
 
     const handleInputChange = (field, value) => {
@@ -65,20 +100,20 @@ const AttendeeSettings = () => {
     }
 
     const handleProfileUpdate = async () => {
+        console.log("Profile:", profile);
         await editAttendeeProfile(profile);
     }
       
     return (
-        <div>
+        <div className="home-container">
             <Header title={"Settings"} />
             <SideBar activePage={"Settings"} />
             <div className="page-container">
                 <div className="settings-container">
-                    {/* edits start */}
                     <div className="settings-header">
                         <div className="avatar-upload-container">
                             <div className="avatar-wrapper">
-                                <img src={selectedFile || defaultAvatar} alt="Avatar" className="avatar-image" />
+                                <img src={selectedFile || user.image || defaultAvatar} alt="Avatar" className="avatar-image" />
                                 {editable && (
                                     <div>
                                         <label htmlFor="file-input" className="camera-icon-wrapper">
@@ -92,7 +127,7 @@ const AttendeeSettings = () => {
                             {editable && selectedFile && (                                
                                 <div className="delete-button-container" onClick={handleDelete}>
                                     <button className="delete-button">Delete avatar</button>
-                                    <MdDeleteOutline size={30} />
+                                    <MdDeleteOutline size={20} color="#fff" />
                                 </div>
                             )}
                         </div>
@@ -160,7 +195,7 @@ const AttendeeSettings = () => {
                         </div>
                     </div>
 
-                    <div className="pwd-group-heading">
+                    {/* <div className="pwd-group-heading">
                         <p>Change Password</p>
                         <MdOutlineLock />
                     </div>
@@ -197,7 +232,7 @@ const AttendeeSettings = () => {
                                 className="field-input"
                             />
                         </div>
-                    </div>
+                    </div> */}
                     
                     <div 
                         style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 

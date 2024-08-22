@@ -10,7 +10,7 @@
 
 /* universal styles */
 .custom-underline {
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 10px; 
     display: inline-block;
@@ -439,7 +439,7 @@ section :nth-child(even) .section-text-container {
     padding: 20px;
     border-radius: 10px;
     border: 1px #929292 solid;
-    box-shadow: 0 2px 3px 0 #565656;
+    /* box-shadow: 0 2px 3px 0 #565656; */
 }
 
 .button-container {
@@ -454,7 +454,7 @@ section :nth-child(even) .section-text-container {
     width: 70%;
     background-color: #FFC107;
     border: 0;
-    box-shadow: 0 2px 3px 0 #565656;
+    /* box-shadow: 0 2px 3px 0 #565656; */
     font-size: 20px;
     padding: 20px;
     border-radius: 10px;
@@ -523,12 +523,13 @@ section :nth-child(even) .section-text-container {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin-bottom: 5px;;
     cursor: pointer;
 }
 
-.sidebarButton:hover, .activeSidebarButton {
+.sidebarButton:hover, 
+.activeSidebarButton {
     background-color: #fff;
     border-top-left-radius: 100px;
     border-bottom-left-radius: 100px;
@@ -539,7 +540,7 @@ section :nth-child(even) .section-text-container {
 }
 
 .sidebarButton p {
-    font-size: 18px;
+    font-size: 15px;
     color: #fff;
     padding-left: 20px;
     font-weight: 600;
@@ -547,19 +548,29 @@ section :nth-child(even) .section-text-container {
 
 .sidebarButton .icon {
     color: #fff;
-    size: 40;
+    size: 30;
 }
 
 .activeSidebarButton p {
     padding-left: 20px;
     font-weight: 600;
     color: #FFC107;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .activeSidebarButton .icon {
     color: #FFC107;
 }
+
+
+.home-container {
+    background-color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* flex: 1; */
+}
+
 
 /* event */
 .event-container {
@@ -568,37 +579,45 @@ section :nth-child(even) .section-text-container {
     flex: 0 0 auto;
     border-radius: 15px;
     overflow: hidden;
-    width: 400px;
+    width: 250px;
     background-color: #fff;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-    border: 1px solid #cacaca;
+    border: solid 1px #ccc;
     margin-right: 40px;
     margin-bottom: 40px;
 }
 
 .event-container-header {
-    height: 150px;
-    width: 100%;
+    background-image: url("./assets/hero-bg.jpg");
+    background-size: cover;
+    margin: 10px 10px 10px 10px;
+    border-radius: 10px;
+    border: solid 1px #ccc;
     overflow: hidden;
-    object-fit: cover;
+    aspect-ratio: 1/1;
+    cursor: pointer;
 }
 
-.event-container .event-header img {
+.event-container .event-container-header img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
-    background-color: #4caf50;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+.event-container .event-container-header img:hover {
+    transform: scale(1.2);
 }
 
 .event-container .event-info-container {
-    margin: 20px;
+    margin: 10px;
     display: flex;
     flex-direction: column;
 }
 
 .event-container .event-name {
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 10px;
     cursor: pointer;
     display: inline;
 }
@@ -608,44 +627,25 @@ section :nth-child(even) .section-text-container {
     text-underline-offset: 5px;
 }
 
-.event-container .event-organizer-details {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.event-container .event-organizer-details img {
-    width: 30px;
-    border-radius: 100px;
-    margin-right: 30px;
-}
-
-.event-container .event-organizer-details p {
-    color: #FFC107;
-    font-weight: 600;
-    font-size: 17px;
-}
-
 .event-description {
     font-weight: 400;
-    font-size: 15px;
+    font-size: 12px;
     color: #4d4d4d;
-    white-space: nowrap; /* Prevents text from wrapping to the next line */
-    overflow: hidden; /* Hides any text that overflows the container */
-    text-overflow: ellipsis; /* Adds an ellipsis (...) to indicate that the text has been truncated */    
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
 .event-details {
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 10px;
 }
 
 .event-detail {
     display: inline-flex;
     align-items: center;
-    margin-right: 15px;
+    margin-right: 10px;
     padding: 5px 10px;
     margin-top: 10px;
     border-radius: 100px;
@@ -654,15 +654,16 @@ section :nth-child(even) .section-text-container {
 
 .event-detail P {
     margin-left: 7px;
+    font-size: 12px;
 }
 
 
  .categories-container {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
  .categories-container p {
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 500;
 }
 
@@ -672,13 +673,13 @@ section :nth-child(even) .section-text-container {
 }
 
  .categories-container .categories p {
-    margin-right: 10px;
-    padding: 5px 10px;
+    margin-right: 5px;
+    padding: 5px 7px;
     border-radius: 15px;
     background-color: #FDFFB0;
     margin-top: 10px;
     font-weight: lighter;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 /* attendee header */
@@ -693,7 +694,7 @@ section :nth-child(even) .section-text-container {
     background-color: #fff;
     position: fixed;
     border-bottom: #FFC107 solid 1px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); */
     z-index: 1;
 }
 
@@ -717,18 +718,17 @@ section :nth-child(even) .section-text-container {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    font-size: 18px;
     margin: 20px 0;
-    padding: 20px;
+    padding: 13px;
     border-radius: 100px;
-    border: 1px #929292 solid;
-    box-shadow: 0 2px 3px 0 #565656;
+    background-color: #fff;
+    border: solid 1px #ccc;
 }
 
 .search-bar input {
     width: 100%;
     border: none;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .search-bar input:focus {
@@ -740,6 +740,14 @@ section :nth-child(even) .section-text-container {
 /* attendee pages */
 .page-container {
     padding: 140px 20px 20px 19vw;
+}
+
+.greeting {
+    font-size: 18px;
+}
+
+.username {
+    font-weight: 600;
 }
 
 
@@ -762,42 +770,46 @@ section :nth-child(even) .section-text-container {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-top: 50px;  
+    margin-top: 50px; 
 }
 .booked-event-container {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    width: 550px;
-    padding: 0;
+    align-items: center;
+    min-width: 400px;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid #ccc;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     margin: 0 20px 50px 0;
+    background-color: #fff; 
 }
 
 .booked-event-container .image-container {
-    height: 100%;
-    width: 200px;
+    width: 150px;
+    aspect-ratio: 1/1;
+    padding: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 10px;
 }
 
 .booked-event-container .image-container img {
     background-size: cover;
     height: 100%;
     width: 200px;
+    border-radius: 10px;
 }
 
 .booked-event-details-container {
-    margin: 20px 20px;
+    margin: 10px 10px;
     display: flex;
     flex-direction: column;
 }
 
 .booked-event-details-container .event-name {
-    font-size: 25px;
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 20px;
     cursor: pointer;
     display: inline;   
 }
@@ -999,21 +1011,17 @@ section :nth-child(even) .section-text-container {
     flex-wrap: wrap; 
     align-items: center;
     margin-top: 10px;
+    font-weight: 600;
+    font-size: 18px;
 }
 
 .event-page-details img {
     margin-right: 30px;
 }
 
-.event-page-details .event-organizer-detail {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: 20px;
-}
-
-.event-page-details .event-organizer-detail p {
-    margin-left: 10px;
+.event-page-details .event-organizer-details {
+    border-left: solid 1px #ccc;
+    padding-left: 30px;
 }
 
 .event-page-details .organizer-logo {
@@ -1201,10 +1209,10 @@ section :nth-child(even) .section-text-container {
     flex-direction: row;
     align-items: center;
     background-color: #FFC107;
-    padding: 20px;
+    padding: 13px;
     border-radius: 50px;
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     box-shadow: 0 2px 3px 0 #565656;
 }
 
@@ -1335,8 +1343,9 @@ section :nth-child(even) .section-text-container {
 /* toast message */
 .toast-message {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 10px 20px;
     background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
@@ -1450,21 +1459,21 @@ section :nth-child(even) .section-text-container {
   }
   
   .avatar-image {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
   }
   
   .camera-icon-wrapper {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    bottom: 7px;
+    right: 7px;
     background-color: #ffc107;
     border-radius: 50%;
-    padding: 10px;
+    padding: 7px;
     cursor: pointer;
-    border: solid 5px #fff;
+    border: solid 3px #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1472,16 +1481,16 @@ section :nth-child(even) .section-text-container {
   
   .camera-icon {
     color: #fff;
-    font-size: 40px;
+    font-size: 25px;
   }
 
   .delete-button-container {
     display: flex;
     flex-direction: row;
     align-items: center;
-    background-color: lightgray;
+    background-color: #da0000;
     color: black;
-    padding: 20px;
+    padding: 10px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -1490,8 +1499,9 @@ section :nth-child(even) .section-text-container {
   
   .delete-button {
     border: none;
-    background-color: lightgray;
-    font-size: 20px;
+    background-color: #da0000;
+    color: #fff;
+    font-size: 15px;
   }
 
   .edit-button {
@@ -1502,36 +1512,37 @@ section :nth-child(even) .section-text-container {
     gap: 10px;
     background-color: #ffc107;
     color: white;
-    padding: 20px;
+    padding: 10px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: 600;
   }
   
 .name-group {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
-    margin-right: 50px;
+    margin-right: 20px;
 }
 
 .input-group label {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .field-input {
-    padding: 20px;
-    font-size: 18px;
+    padding: 13px;
+    font-size: 13px;
     border-radius: 10px;
     border: 2px solid ;
-    width: 400px;
+    width: 340px;
 }
 
 .field-input:focus {
@@ -1601,8 +1612,8 @@ section :nth-child(even) .section-text-container {
   }
   
   .image-skeleton {
-    width: 100%;
-    height: 150px;
+    height: 100%;
+    aspect-ratio: 1/1;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
@@ -1667,20 +1678,21 @@ section :nth-child(even) .section-text-container {
 
   /* HorizontalCardSkeleton.css */
 .horizontal-card-skeleton {
-    width: 550px;
-    height: 200px;
+    width: 400px;
+    height: 150px;
     display: flex;
     background: #f0f0f0;
     border-radius: 8px;
     padding: 12px;
     gap: 12px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    margin: 0 20px 20px 0;
+    margin: 20px 20px 20px 0;
   }
   
-  .image-skeleton {
-    width: 100px;
-    height: 100px;
+  .event-image-skeleton {
+    width: 100%;
+    aspect-ratio: 1/1;
+    padding: 10px;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
@@ -1748,4 +1760,19 @@ section :nth-child(even) .section-text-container {
 
 .empty-search img {
     height: 450px;
+}
+
+.waitlist-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 500px;
+    margin-bottom: 30px;
+}
+
+.attendee {
+    border-bottom: #ccc 0.1px solid;
+    padding-bottom: 5px;
+    margin-right: 15px;
 }

@@ -10,11 +10,6 @@ export const cancelBooking = async (eventID) => {
     console.log("Event id:", eventID);
     console.log("Guest id:", guestID);
 
-    const dataToPass = {
-        guestID: guestID,
-        eventID: eventID,
-    }
-
     try {
         const request = await axios.delete(`${backendURL}/events/bookings/delete/${guestID}/${eventID}`);
         console.log("Booking cancellation status:", request.data.response);

@@ -2,11 +2,25 @@ import React from "react";
 import { MdLocationOn, MdAlarm } from "react-icons/md";
 import { formatTimestamp } from "../../utils/formatTimestamp";
 import { useNavigate } from "react-router-dom";
+import defaultImg from "../../assets/hero-bg.jpg"
 
 // import image from "../../assets/image-1.png"
 
-const BookedEvent = ({name, venue, timestamp, image, description, organizer, organizer_logo, orgID, categories, id}) => {
+const BookedEvent = ({
+    name, 
+    venue, 
+    timestamp, 
+    image, 
+    rate,
+    description, 
+    organizer, 
+    organizer_logo, 
+    orgID, 
+    categories, 
+    id
+}) => {
     const {date, time, daysLeft, isEnded} = formatTimestamp(timestamp);
+    rate = Number(rate).toFixed(2) !== Number(0).toFixed(2) ? Number(rate).toFixed(2) : "Free";
 
     const navigate = useNavigate();
 
@@ -22,6 +36,7 @@ const BookedEvent = ({name, venue, timestamp, image, description, organizer, org
                 organizer_logo,
                 orgID,
                 categories,
+                rate,
                 booked: true,
                 isEnded,
                 id
@@ -33,7 +48,7 @@ const BookedEvent = ({name, venue, timestamp, image, description, organizer, org
     return (
         <div className="booked-event-container">
             <div className="image-container">
-                <img src={image} alt="event flyer"/>
+                <img src={image || defaultImg} alt="event flyer"/>
             </div>
 
             <div className="booked-event-details-container">

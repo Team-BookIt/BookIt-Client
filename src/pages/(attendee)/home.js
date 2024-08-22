@@ -61,8 +61,8 @@ const Home = () => {
 
         const interested = upcomingEvents.filter((event) => {
             const tags = event.event_tags || [];
-            const interests = user.interests || [];
-            return (interests.length !==0 ? tags.some(tag => interests.includes(tag)) : []);
+            const interests = user ? user.interests : [];
+            return (interests && interests.length !==0 ? tags.some(tag => interests.includes(tag)) : []);
         });
 
         setInterestedEvents(interested);
@@ -108,11 +108,11 @@ const Home = () => {
     };
 
     return (
-        <div className="parent-container">
+        <div className="home-container">
             <Header title={"Home"} />
             <SideBar activePage={"Home"} />
             <div className="page-container">
-                <p>Hi there, {user && user.first_name ? user.first_name : "User"}</p>
+                <p className="greeting">Hi there<span className="username">{user && user.first_name ? `, ${user.first_name}` : ""}👋</span></p>
                 <SearchBar onSearch={handleSearch} />
 
                 {searchTerm && (
@@ -148,7 +148,7 @@ const Home = () => {
                 <div className="home-section">
                     <p className="custom-underline">Events you might like</p>
                     <div className="events-container">
-                        {interestedEvents !== 0 ? interestedEvents.map(event => (
+                        {interestedEvents.length !== 0 ? interestedEvents.map(event => (
                                 <Event
                                     key={event.event_id}
                                     id={event.event_id}

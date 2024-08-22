@@ -35,7 +35,7 @@ const SideBar = ({ activePage }) => {
                     className={activePage === "Home" ? "activeSidebarButton" : "sidebarButton"}
                     onClick={handleHomePress}
                 >
-                    <MdOutlineHome size={40} className="icon" />
+                    <MdOutlineHome size={30} className="icon" />
                     <p>Home</p>
                 </div>
 
@@ -43,7 +43,7 @@ const SideBar = ({ activePage }) => {
                     className={activePage === "Bookings" ? "activeSidebarButton" : "sidebarButton"}
                     onClick={handleBookingsPress}
                 >
-                    <MdOutlineConfirmationNumber size={40} className="icon" />
+                    <MdOutlineConfirmationNumber size={30} className="icon" />
                     <p>Bookings</p>
                 </div>
                 
@@ -51,7 +51,7 @@ const SideBar = ({ activePage }) => {
                     className={activePage === "Settings" ? "activeSidebarButton" : "sidebarButton"}
                     onClick={handleSettingsPress}
                 >
-                    <MdOutlineSettings size={40} className="icon" />
+                    <MdOutlineSettings size={30} className="icon" />
                     <p>Settings</p>
                 </div>
             </div>

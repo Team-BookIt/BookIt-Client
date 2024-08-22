@@ -11,7 +11,7 @@ import sideImage from "../../assets/onboarding-2.png";
 
 const Signup = () => {
     const navigate = useNavigate();
-    const backendRoute = process.env.REACT_APP_BOOKIT_BACKEND_URL;
+    const backendRoute = "http://localhost:3001";
 
     // to keep track of which type of user is signing up: attendee or organizer
     const [userType, setUserType] = useState("attendee");

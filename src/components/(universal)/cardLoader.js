@@ -4,7 +4,7 @@ import React from 'react';
 const CardSkeleton = () => {
   return (
     <div className="card-skeleton">
-      <div className="image-skeleton"></div>
+      <div className="event-image-skeleton"></div>
       <div className="text-skeleton title-skeleton"></div>
       <div className="text-skeleton subtitle-skeleton"></div>
       

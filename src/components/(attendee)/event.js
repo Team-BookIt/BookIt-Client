@@ -1,6 +1,6 @@
 // Event.js
 import React from "react";
-import { MdAccessTime, MdLocationOn, MdCalendarMonth } from "react-icons/md";
+import { MdAccessTime, MdLocationOn, MdCalendarMonth, MdAirplaneTicket } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { formatTimestamp } from "../../utils/formatTimestamp";
 import defaultImg from "../../assets/hero-bg.jpg"
@@ -10,7 +10,8 @@ const Event = ({
     timestamp, 
     venue, 
     description, 
-    organizer, 
+    organizer,
+    rate, 
     organizer_logo, 
     categories, 
     id, 
@@ -20,10 +21,13 @@ const Event = ({
 }) => {
     const navigate = useNavigate();
 
+    rate = Number(rate).toFixed(2) !== Number(0).toFixed(2) ? Number(rate).toFixed(2) : "Free";
+
     const {date, time, isEnded} = formatTimestamp(timestamp);
 
     const handleEventPress = () => {
         console.log("Event booked?", booked);
+        console.log("Rate:", rate);
         navigate("/eventPage", {
             state: {
                 id,
@@ -32,6 +36,7 @@ const Event = ({
                 time,
                 venue,
                 description,
+                rate,
                 organizer,
                 organizer_logo,
                 categories,
@@ -45,8 +50,14 @@ const Event = ({
 
     return (
         <div className="event-container">
-            <div className="event-container-header">
-                <img src={image && image !== "" && Object.keys(image).length !== "" ? image : defaultImg} alt="event flyer" />
+            <div 
+                className="event-container-header"
+                onClick={handleEventPress}
+            >
+                <img 
+                    src={image && image !== "" && Object.keys(image).length !== "" ? image : defaultImg} 
+                    alt="event flyer"
+                />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
@@ -66,18 +77,11 @@ const Event = ({
                         <MdCalendarMonth />
                         <p>{date}</p>
                     </div>
-                </div>
-                
-                {categories[0] !== null && (
-                    <div className="categories-container">
-                        <p>Categories</p>
-                        <div className="categories">
-                            {categories.map((category, index) => (
-                                <p key={index}>{category}</p>
-                            ))}
-                        </div>
+                    <div className="event-detail">
+                        <MdAirplaneTicket />
+                        <p>{rate}</p>
                     </div>
-                )}
+                </div>
             </div>
         </div>
     );

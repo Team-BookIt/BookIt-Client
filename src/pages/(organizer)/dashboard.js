@@ -10,6 +10,7 @@ import AddEvent from "../../components/(organizer)/addEvent";
 import { getOrganizerProfile } from "../../utils/getOrganizerProfile";
 import EventWaitlist from "../../components/(organizer)/eventWaitlist";
 import { getOrganizerData } from "../../utils/getOrganizerData";
+import noEvents from "../../assets/no-events.png";
 
 const Dashboard = () => {
     const [filter, setFilter] = useState("upcoming");
@@ -115,37 +116,50 @@ const Dashboard = () => {
                 </div>
 
                 <div className="events-container">
-                    {filter === "upcoming" &&
-                        upcomingEvents.map((event) => (
-                            <UpcomingEvent
-                                key={event.event_id}
-                                name={event.title}
-                                rate={30}
-                                timestamp={event.event_timestamp}
-                                venue={event.venue}
-                                categories={["Tech", "Fun", "Party"]}
-                                event_id={event.event_id}
-                                waitlist={45}
-                                onEventPress={handleUpcomingEventPress}
+                    {filter === "upcoming" && (
+                        upcomingEvents.length === 0 ? (
+                            <img src={noEvents} alt="No upcoming events" />
+                        ) : (
+                            upcomingEvents.map((event) => (
+                                <UpcomingEvent
+                                    key={event.event_id}
+                                    name={event.title}
+                                    rate={30}
+                                    timestamp={event.event_timestamp}
+                                    venue={event.venue}
+                                    categories={["Tech", "Fun", "Party"]}
+                                    event_id={event.event_id}
+                                    waitlist={45}
+                                    onEventPress={handleUpcomingEventPress}
+                                    image={event.image}
                                 />
-                            ))}
-                    {filter === "past" &&
-                        pastEvents.map((event) => (
-                            <PastEvent
-                            key={event.id}
-                            name={event.title}
-                            attendees={30}
-                            attendanceRate={"65%"}
-                            reviews={67}
-                            ratings={3.2}
-                            />
-                        ))}
+                            ))
+                        )
+                    )}
+
+                    {filter === "past" && (
+                        pastEvents.length === 0 ? (
+                            <img src={noEvents} alt="No upcoming events" />
+                        ) : (
+                            pastEvents.map((event) => (
+                                <PastEvent
+                                    key={event.id}
+                                    name={event.title}
+                                    attendees={30}
+                                    attendanceRate={"65%"}
+                                    reviews={67}
+                                    ratings={3.2}
+                                    image={event.image}
+                                />
+                            ))
+                        )
+                    )}
                 </div>
                 
                 {showForm && (
                     <div className="modal-overlay" onClick={handleCloseForm}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <AddEvent organizerID={orgID} onSuccess={handleCloseForm} />
+                            <AddEvent organizerID={orgID} onSuccess={handleCloseForm}  />
                         </div>
                     </div>
                 )}
@@ -153,7 +167,7 @@ const Dashboard = () => {
                 {showWaitlist && (
                     <div className="modal-overlay" onClick={handleCloseForm}>
                         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                            <EventWaitlist title={eventDetails.title} id={eventDetails.id} key={eventDetails.id} />
+                            <EventWaitlist onClose={setShowWaitlist} title={eventDetails.title} id={eventDetails.id} key={eventDetails.id} />
                         </div>
                     </div>
                 )}

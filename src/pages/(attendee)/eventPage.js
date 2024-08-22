@@ -7,7 +7,8 @@ import {
     MdEmail, 
     MdLanguage, 
     MdPhone,
-    MdChat
+    MdChat,
+    MdAirplaneTicket
 } from "react-icons/md";
 import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
@@ -31,6 +32,7 @@ const EventPage = () => {
     const [showTaost, setShowToast] = useState(false);
     const [toastType, setToastType] = useState("");
     const [toastMessage, setToastMessage] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
     const [eventReviews, setEventReviews] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -40,6 +42,7 @@ const EventPage = () => {
         time,
         venue,
         description,
+        rate,
         organizer,
         organizer_logo,
         orgID,
@@ -49,14 +52,15 @@ const EventPage = () => {
         booked
     } = location.state || {};
 
-    const [eventBooked, setEventBooked] = useState(booked);
+    // const [eventBooked, setEventBooked] = useState(booked);
 
 
     useEffect(() => {
         const fetchEvent = async () => {
             console.log("Event id:", id);
             const eventData = await getEventById(id);
-            setEventReviews(eventData.eventReviews);
+            if (eventData)
+                setEventReviews(eventData.eventReviews);
         }
 
         fetchEvent();
@@ -72,9 +76,39 @@ const EventPage = () => {
         setIsReviewModalOpen(false);
     };
 
-    const handleButtonPress = () => {
-        setShowConfirmationModal(true);
+    const handlePayment = () => {
+        const handler = window.PaystackPop.setup({
+            key: 'pk_test_2ef45ac3bdd13380b0b455505b6dcd42bb7755ed', // Replace with your public key
+            email: 'asarebediakobaffuoh@gmail.com',
+            amount: rate * 100, // Amount in kobo
+            ref: '' + Math.floor(Math.random() * 10000000000 + 1), // Generate a random reference
+            onClose: () => {
+                alert('Payment window closed.');
+            },
+            callback: () => {
+                onYesPress();
+                navigate("/home");
+                // You can handle the response here, such as updating the UI or making a request to your backend
+            }
+        });
+    
+        handler.openIframe();
     };
+
+    const handleButtonPress = () => {
+        console.log("Rate:", rate);
+        setModalMessage("Are you sure you want to book this event?");
+        if (rate === "Free"){
+            setShowConfirmationModal(true);
+        } else {
+            handlePayment();
+        }
+    };
+
+    const handleEventCancellation = async () => {
+        setModalMessage("Are you sure you want to cancel this event? This action cannot be undone.");
+        setShowConfirmationModal(true);
+    }
 
     const onYesPress = async() => {
         setLoading(true);
@@ -82,15 +116,17 @@ const EventPage = () => {
         if (!booked){
             const booking = await bookEvent(id);
             await addUserInterests(categories);
-            if (booking.message === "Event registration successful") {
-                setToastMessage("Event booked successfully!");
-                setToastType("success");
-            } else if (booking.message === "Seems you've already booked this event") {
-                setToastMessage("Seems you've already booked this event");
-                setToastType("warning");
-            } else {
-                setToastMessage("Failed to book event");
-                setToastType("error");
+            if (booking) {                
+                if (booking.message === "Event registration successful") {
+                    setToastMessage("Event booked successfully!");
+                    setToastType("success");
+                } else if (booking.message === "Seems you've already booked this event") {
+                    setToastMessage("Seems you've already booked this event");
+                    setToastType("warning");
+                } else {
+                    setToastMessage("Failed to book event");
+                    setToastType("error");
+                }
             }
         } else if (booked) {
             const cancel = await cancelBooking(eventID);
@@ -107,6 +143,7 @@ const EventPage = () => {
         }
 
         setShowConfirmationModal(false);
+        setLoading(false);
         setShowToast(true);
         setTimeout(() => navigate("/home"), 1000);
     }
@@ -174,6 +211,10 @@ const EventPage = () => {
                             <MdAccessTime />
                             <p>{time}</p>
                         </div>
+                        <div className="event-detail">
+                            <MdAirplaneTicket />
+                            <p>{rate}</p>
+                        </div>
                     </div>
 
                     <div>
@@ -184,21 +225,9 @@ const EventPage = () => {
                     <div>
                         <p className="custom-underline">Organizer</p>
                         <div className="event-organizer-container">
-                                <img src={organizer_logo || defaultAvatar} alt="organizer-logo" className="organizer-logo" onClick={() => alert(organizer_logo)}/> 
+                            <img src={organizer_logo || defaultAvatar} alt="organizer-logo" className="organizer-logo" onClick={() => alert(organizer_logo)}/> 
                             <div className="event-organizer-details">
-                                <div className="event-organizer-detail">
-                                    <MdEmail />
-                                    <p>{organizer}</p>
-                                </div>
-                                <div className="event-organizer-detail">
-                                    <MdLanguage />
-                                    <p>{organizer}</p>
-                                </div>
-                                <div className="event-organizer-detail">
-                                    <MdPhone />
-                                    <p>{organizer}</p>
-                                </div>
-
+                                <p>{organizer}</p>
                                 <div>
                                     <button className="view-profile" onClick={handleViewOrganizerProfile}>
                                         View Profile
@@ -227,7 +256,7 @@ const EventPage = () => {
                                 <PrimaryButton title={"Book It"} onButtonClick={handleButtonPress} />
                             </div>
                         ) : (
-                            <div className="cancel-booking-button" onClick={handleButtonPress}>
+                            <div className="cancel-booking-button" onClick={handleEventCancellation}>
                                 <button type="submit">Cancel Booking</button>
                             </div>
                         )
@@ -254,7 +283,7 @@ const EventPage = () => {
                 <ConfirmationModal 
                     onYesPress={onYesPress} 
                     onNoPress={onNoPress} 
-                    message="Are you sure you want to book this event?" 
+                    message={modalMessage} 
                     loading={loading}
                 />
             )}

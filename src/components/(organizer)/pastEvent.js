@@ -1,3 +1,4 @@
+import { image } from "@cloudinary/url-gen/qualifiers/source";
 import React from "react";
 import { MdPerson, MdAssessment, MdStar, MdMessage } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +8,8 @@ const PastEvent = ({
     attendees,
     attendanceRate,
     reviews,
-    ratings
+    ratings,
+    image
 }) => {
     const navigate = useNavigate();
 
@@ -17,8 +19,8 @@ const PastEvent = ({
 
     return (
         <div className="event-container">
-            <div className="event-header">
-                <img alt="event flyer" />
+            <div className="event-container-header">
+                <img src={image} alt="event flyer" />
             </div>
             <div className="event-info-container">
                 <p className="event-name" onClick={handleEventPress}>
