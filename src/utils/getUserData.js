@@ -6,6 +6,7 @@ export const getUserData = async() => {
 
     if (user) {
         const userID = user.id;
+        console.log("User id from local storage:", userID);
         try {
             const response = await axios.get(`${backendURL}/user/${userID}`);
             console.log("User profile returned successfully:", response.data.userProfile[0]);

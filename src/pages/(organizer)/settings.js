@@ -4,27 +4,65 @@ import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(organizer)/sideBar";
 import { useNavigate } from "react-router-dom";
 import { getOrganizerData } from "../../utils/getOrganizerData";
+import axios from "axios";
 
 import defaultAvatar from "../../assets/default-avatar.png";
 import { editOrganizerProfile } from "../../utils/editOrgProfile";
+import ConfirmationModal from "../../components/(universal)/actionConfirmationModal";
 
 const OrganizerSettings = () => {
     const navigate = useNavigate();
     const [editable, setEditable] = useState(false);
     const [organizerData, setOrganizerData] = useState({});
     const [selectedFile, setSelectedFile] = useState(null);
-    const [showEditModal, setShowEditModal] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-    const [profile, setProfile] = useState({});
+    const [profile, setProfile] = useState({
+        name: organizerData.name || "",
+        contact: organizerData.contact || "",
+        email: organizerData.email || "",
+        location: organizerData.location || "",
+        bio: organizerData.bio || "",
+        website: organizerData.website || "",
+        logo: organizerData.logo || ""
+    });
+    const [logo, setLogo] = useState(organizerData.logo || "");
+
+    const presetKey = "bookit";
+    const cloudName = "dmht0mpfq";
+
+    const uploadImage = async (e) => {
+        setSelectedFile(URL.createObjectURL(e.target.files[0]));
+        const file = e.target.files[0];
+        const formData = new FormData();
+    
+        formData.append("file", file);
+        formData.append("upload_preset", presetKey);
+        formData.append("cloud_name", cloudName);
+    
+        try {
+            const res = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData);
+            const imageUrl = res.data.secure_url;
+            console.log("Response:", res);
+    
+            // Update image state and profile state with the new image URL
+            setLogo(imageUrl);
+            setProfile(prevProfile => ({
+                ...prevProfile,
+                logo: imageUrl
+            }));
+        } catch (err) {
+            console.log("Error uploading image:", err);
+        }
+    };
 
     useEffect(() => {
         const organizer = getOrganizerData();
         setOrganizerData(organizer);
     }, []);
 
-    const handleFileChange = (event) => {
-        setSelectedFile(URL.createObjectURL(event.target.files[0]));
-    };
+    // const handleFileChange = (event) => {
+    //     setSelectedFile(URL.createObjectURL(event.target.files[0]));
+    // };
 
     const handleDelete = () => {
         setSelectedFile(null);
@@ -32,6 +70,7 @@ const OrganizerSettings = () => {
 
     const handleEditPress = () => {
         setEditable(true);
+        console.log("Organizer:", organizerData);
     }
 
     const handleSavePress = async () => {
@@ -47,9 +86,10 @@ const OrganizerSettings = () => {
         }))
     }
 
-    const closeEditModal = () => {
-        setShowEditModal(false);
-    };
+    const handleLogOutPress = () => {
+        setShowConfirmationModal(true);
+        localStorage.removeItem("user");
+    }
 
     const handleYesPress = () => {
         console.log("Yes pressed");
@@ -72,13 +112,13 @@ const OrganizerSettings = () => {
                     <div className="settings-header">
                         <div className="avatar-upload-container">
                             <div className="avatar-wrapper">
-                                <img src={selectedFile || defaultAvatar} alt="Avatar" className="avatar-image" />
+                                <img src={selectedFile || logo || defaultAvatar} alt="Avatar" className="avatar-image" />
                                 {editable && (
                                     <div>
                                         <label htmlFor="file-input" className="camera-icon-wrapper">
                                             <MdOutlineCameraAlt className="camera-icon" />
                                         </label>
-                                        <input id="file-input" accept="image/*" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
+                                        <input id="file-input" accept="image/*" type="file" onChange={uploadImage} style={{ display: 'none' }} />
                                     </div>
                                 )}
                             </div>
@@ -118,7 +158,7 @@ const OrganizerSettings = () => {
                             </label>
                             <input 
                                 type="text"
-                                placeholder={""}
+                                placeholder={profile.name}
                                 value={profile.name}
                                 readOnly={!editable}
                                 className="field-input"
@@ -131,7 +171,7 @@ const OrganizerSettings = () => {
                             </label>
                             <input 
                                 type="email"
-                                placeholder={""}
+                                placeholder={profile.email}
                                 value={profile.email}
                                 readOnly={!editable}
                                 onChange={(e) => handleInputChange("email", e.target.value)}
@@ -145,7 +185,7 @@ const OrganizerSettings = () => {
                             </label>
                             <input 
                                 type="tel"
-                                placeholder={""}
+                                placeholder={profile.contact}
                                 value={profile.contact}
                                 readOnly={!editable}
                                 onChange={(e) => handleInputChange("contact", e.target.value)}
@@ -159,7 +199,7 @@ const OrganizerSettings = () => {
                             </label>
                             <input 
                                 type="text"
-                                placeholder={""}
+                                placeholder={profile.location}
                                 value={profile.location}
                                 readOnly={!editable}
                                 onChange={(e) => handleInputChange("location", e.target.value)}
@@ -238,12 +278,21 @@ const OrganizerSettings = () => {
                     <div 
                         style={{width: "150px", alignSelf: "center", marginTop: "50px"}} 
                         className="edit-button"
+                        onClick={handleLogOutPress}
                     >
                         <p>Log out</p>
                         <MdExitToApp size={30} />
                     </div>
                 </div>
             </div>
+
+            {showConfirmationModal && (
+                    <ConfirmationModal 
+                        message="Are you sure you want to log out?"
+                        onYesPress={handleYesPress}
+                        onNoPress={handleNoPress}
+                    />
+                )}
         </div>
     );
 };

@@ -11,6 +11,7 @@ import { getOrganizerProfile } from "../../utils/getOrganizerProfile";
 import EventWaitlist from "../../components/(organizer)/eventWaitlist";
 import { getOrganizerData } from "../../utils/getOrganizerData";
 import noEvents from "../../assets/no-events.png";
+import CardSkeleton from "../../components/(universal)/cardLoader";
 
 const Dashboard = () => {
     const [filter, setFilter] = useState("upcoming");
@@ -21,11 +22,16 @@ const Dashboard = () => {
     const [eventDetails, setEventDetails] = useState({});
     const [showWaitlist, setShowWaitlist] = useState(false);
     const [orgID, setOrgID] = useState();
+    const [refresh, setRefresh] = useState(false);
+    const [loading, setLoading] = useState(false);
+    
 
     const handleAddEventClick = () => setShowForm(true);
+
     const handleCloseForm = () => {
         setShowForm(false);
         setShowWaitlist(false);
+        setRefresh(!refresh);
     };
 
     const handlePastClick = () => setFilter("past");
@@ -37,10 +43,6 @@ const Dashboard = () => {
         setShowWaitlist(true);
     };
 
-    const handlePastEventPress = () => {
-
-    }
-
     useEffect(() => {
         const orgData = getOrganizerData();
         setOrgID(Number(orgData.id));
@@ -48,21 +50,24 @@ const Dashboard = () => {
 
     useEffect(() => {
         const getOrganizerEvents = async () => {
-            console.log("Organizer ID:", orgID)
+            setLoading(true); // Start loading
             try {
                 const organizerProfile = await getOrganizerProfile(orgID);
-                console.log("Organizer events:", organizerProfile.organizerEventDetails);
                 if (organizerProfile.organizerEventDetails) {
                     setOrganizerEvents(organizerProfile.organizerEventDetails);
                 }
             } catch (error) {
                 console.error("Error fetching organizer events:", error);
+            } finally {
+                setLoading(false); // Stop loading
             }
         };
-
-        getOrganizerEvents();
-    }, [orgID]);
-
+    
+        if (orgID) {
+            getOrganizerEvents();
+        }
+    }, [orgID, refresh]);
+    
     useEffect(() => {
         const now = Date.now();
 
@@ -116,45 +121,55 @@ const Dashboard = () => {
                 </div>
 
                 <div className="events-container">
-                    {filter === "upcoming" && (
-                        upcomingEvents.length === 0 ? (
-                            <img src={noEvents} alt="No upcoming events" />
-                        ) : (
-                            upcomingEvents.map((event) => (
-                                <UpcomingEvent
-                                    key={event.event_id}
-                                    name={event.title}
-                                    rate={30}
-                                    timestamp={event.event_timestamp}
-                                    venue={event.venue}
-                                    categories={["Tech", "Fun", "Party"]}
-                                    event_id={event.event_id}
-                                    waitlist={45}
-                                    onEventPress={handleUpcomingEventPress}
-                                    image={event.image}
-                                />
-                            ))
-                        )
-                    )}
+                    {loading ? (
+                        [1, 2, 3, 4, 5].map((_, index) => <CardSkeleton key={index} />) // Display skeleton loaders
+                    ) : (
+                        <>
+                            {filter === "upcoming" && (
+                                upcomingEvents.length === 0 ? (
+                                    <div className="no-org-events">
+                                        <img src={noEvents} alt="No upcoming events" />
+                                    </div>
+                                ) : (
+                                    upcomingEvents.map((event) => (
+                                        <UpcomingEvent
+                                            key={event.event_id}
+                                            name={event.title}
+                                            rate={event.price}
+                                            timestamp={event.event_timestamp}
+                                            venue={event.venue}
+                                            categories={["Tech", "Fun", "Party"]}
+                                            event_id={event.event_id}
+                                            onEventPress={handleUpcomingEventPress}
+                                            image={event.image}
+                                        />
+                                    ))
+                                )
+                            )}
 
-                    {filter === "past" && (
-                        pastEvents.length === 0 ? (
-                            <img src={noEvents} alt="No upcoming events" />
-                        ) : (
-                            pastEvents.map((event) => (
-                                <PastEvent
-                                    key={event.id}
-                                    name={event.title}
-                                    attendees={30}
-                                    attendanceRate={"65%"}
-                                    reviews={67}
-                                    ratings={3.2}
-                                    image={event.image}
-                                />
-                            ))
-                        )
+                            {filter === "past" && (
+                                pastEvents.length === 0 ? (
+                                    <div className="no-org-events">
+                                        <img src={noEvents} alt="No past events" />
+                                    </div>
+                                ) : (
+                                    pastEvents.map((event) => (
+                                        <PastEvent
+                                            key={event.id}
+                                            name={event.title}
+                                            attendees={30}
+                                            attendanceRate={"65%"}
+                                            reviews={67}
+                                            ratings={3.2}
+                                            image={event.image}
+                                        />
+                                    ))
+                                )
+                            )}
+                        </>
                     )}
                 </div>
+
                 
                 {showForm && (
                     <div className="modal-overlay" onClick={handleCloseForm}>

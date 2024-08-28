@@ -53,10 +53,6 @@ const UpcomingEvent = ({
                         <MdMoney />
                         <p>{rate}</p>
                     </div>
-                    <div className="event-detail">
-                        <MdPerson />
-                        <p>{waitlist} people on waitlist</p>
-                    </div>
                 </div>
 
                 {/* {categories[0] !== null && (

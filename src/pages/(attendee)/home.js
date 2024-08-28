@@ -7,7 +7,7 @@ import Header from "../../components/(universal)/header";
 import SideBar from "../../components/(attendee)/sideBar";
 import { getUserBookedEvents } from "../../utils/getUserBookedEvents";
 import CardSkeleton from "../../components/(universal)/cardLoader";
-import noEvents from "../../assets/no-events.png"
+import noEvents from "../../assets/no-events.png";
 
 const Home = () => {
     const [user, setUser] = useState({});
@@ -39,7 +39,7 @@ const Home = () => {
         };
         
         const getUser = async() => {
-            setUser(await getUserData()); // Fetch the user data on mount
+            setUser(await getUserData()); 
         };
         
         getUser();
@@ -68,7 +68,7 @@ const Home = () => {
         setInterestedEvents(interested);
         setUpcomingEvents(upcoming);
         setPastEvents(past);
-    }, [events, upcomingEvents]);
+    }, [user, events, upcomingEvents]);
 
     useEffect(() => {
         const getBookedEvents = async () => {
@@ -109,7 +109,7 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <Header title={"Home"} />
+            <Header title={"Home"} profilePic={user.image} />
             <SideBar activePage={"Home"} />
             <div className="page-container">
                 <p className="greeting">Hi there<span className="username">{user && user.first_name ? `, ${user.first_name}` : ""}👋</span></p>
@@ -137,7 +137,7 @@ const Home = () => {
                                 />
                             )) : (
                                 <div className="empty-search">
-                                    <img src={noEvents} />
+                                    <img src={noEvents} alt="no-events" />
                                 </div>
                             )}
                         </div>

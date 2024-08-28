@@ -9,7 +9,6 @@ import axios from "axios";
 
 import defaultAvatar from "../../assets/default-avatar.png";
 import { getUserData } from "../../utils/getUserData";
-import { upload } from "@testing-library/user-event/dist/upload";
 
 const AttendeeSettings = () => {
     const navigate = useNavigate();
@@ -106,7 +105,7 @@ const AttendeeSettings = () => {
       
     return (
         <div className="home-container">
-            <Header title={"Settings"} />
+            <Header title={"Settings"} profilePic={user.image} />
             <SideBar activePage={"Settings"} />
             <div className="page-container">
                 <div className="settings-container">

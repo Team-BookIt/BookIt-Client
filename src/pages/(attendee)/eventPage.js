@@ -3,10 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
     MdAccessTime, 
     MdLocationOn, 
-    MdCalendarMonth, 
-    MdEmail, 
-    MdLanguage, 
-    MdPhone,
+    MdCalendarMonth,
     MdChat,
     MdAirplaneTicket
 } from "react-icons/md";
@@ -76,7 +73,7 @@ const EventPage = () => {
         setIsReviewModalOpen(false);
     };
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         const handler = window.PaystackPop.setup({
             key: 'pk_test_2ef45ac3bdd13380b0b455505b6dcd42bb7755ed', // Replace with your public key
             email: 'asarebediakobaffuoh@gmail.com',
@@ -88,6 +85,7 @@ const EventPage = () => {
             callback: () => {
                 onYesPress();
                 navigate("/home");
+
                 // You can handle the response here, such as updating the UI or making a request to your backend
             }
         });
@@ -118,7 +116,10 @@ const EventPage = () => {
             await addUserInterests(categories);
             if (booking) {                
                 if (booking.message === "Event registration successful") {
-                    setToastMessage("Event booked successfully!");
+                    setToastMessage(
+                        `Event booked successfully!
+                        Event ticket has been sent to your email.`
+                    );
                     setToastType("success");
                 } else if (booking.message === "Seems you've already booked this event") {
                     setToastMessage("Seems you've already booked this event");
@@ -145,7 +146,7 @@ const EventPage = () => {
         setShowConfirmationModal(false);
         setLoading(false);
         setShowToast(true);
-        setTimeout(() => navigate("/home"), 1000);
+        setTimeout(() => navigate("/home"), 2000);
     }
 
     const onNoPress = () => {
@@ -170,7 +171,8 @@ const EventPage = () => {
     };
 
     const renderReviews = (reviews) => {
-        if (!reviews) {
+        console.log("Reviews:", reviews);
+        if (!reviews || reviews.length === 0) {
             return (
                 <div className="no-events-img-container">
                     <img src={noReview} alt="no reviews" className="no-events-img" />

@@ -109,7 +109,7 @@ const OrganizerProfile = () => {
 
                     <div>
                         <p className="custom-underline">Contact Information</p>
-                        <div className="event-organizer-details">
+                        <div className="organizer-contact-details">
                                 <div className="event-organizer-detail">
                                     <MdEmail />
                                     <p>{organizerDetails.email || "Not set"}</p>

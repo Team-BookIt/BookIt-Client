@@ -10,10 +10,10 @@ const Header = ({ title, profilePic }) => {
     return (
         <div className="attendee-header">
             <p>{title}</p>
-            <img 
+            {/* <img 
                 src={profilePic ? profilePic : defaultAvatar}
                 onClick={handlePicPress}
-            />
+            /> */}
         </div>
     )
 }

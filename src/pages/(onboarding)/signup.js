@@ -251,7 +251,7 @@ const Signup = () => {
 
                     <p className="terms">
                         Your personal information will not be shared with third-party entities.
-                        By signing up, you agree to our <a href="/signup">terms of service</a> and <a href="/signup">privacy policy</a>
+                        By signing up, you agree to our <a href="https://bookit.oseiagm.com/terms-conditions/">terms of service</a> and <a href="https://bookit.oseiagm.com/privacy-policy/">privacy policy</a>
                     </p>
 
                     <PrimaryButton title={loading ? <Loading /> : "Signup"} />

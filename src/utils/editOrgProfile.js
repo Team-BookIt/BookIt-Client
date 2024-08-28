@@ -5,7 +5,7 @@ const orgID = Number(JSON.parse(localStorage.getItem("organizer")).id) || "";
 
 export const editOrganizerProfile = async( field ) => {
     try {
-        const response = await axios.put(`${backendURL}/profile/org/${orgID}/update`, field);
+        const response = await axios.put(`${backendURL}/profile/org/${orgID}/update`, {attributes: field});
         console.log("Profile updated successfully!", response.data);
         return (response.data);
     } catch (error) {
